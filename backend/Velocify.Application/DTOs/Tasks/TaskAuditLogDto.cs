@@ -4,7 +4,7 @@ namespace Velocify.Application.DTOs.Tasks;
 
 public class TaskAuditLogDto
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public Guid TaskItemId { get; set; }
     public UserSummaryDto ChangedBy { get; set; } = null!;
     public string FieldName { get; set; } = string.Empty;

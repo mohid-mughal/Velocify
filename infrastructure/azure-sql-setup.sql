@@ -9,6 +9,19 @@
 -- - Azure SQL Server must already exist
 -- - Run this script with admin credentials
 -- - Update the database name and settings as needed
+--
+-- Usage:
+-- 1. Connect to your Azure SQL Server using SSMS or Azure Data Studio
+-- 2. Run this script against the 'master' database
+-- 3. The script will create the VelocifyDB database and configure it
+-- 4. Update your application connection string with the credentials
+-- 5. Run EF Core migrations: dotnet ef database update
+--
+-- Important Notes:
+-- - This script is idempotent (safe to run multiple times)
+-- - Serverless tier auto-pauses after 60 minutes of inactivity
+-- - Serverless tier auto-resumes on first connection
+-- - Min capacity: 0.5 vCores (paused), Max capacity: 2 vCores (active)
 -- =============================================
 
 -- Create the database with serverless configuration
@@ -101,6 +114,9 @@ GO
 -- Connection String Template
 -- =============================================
 -- Use this connection string format in your application:
+--
+-- CRITICAL: Must include connection pooling parameters for Azure App Service F1 tier
+--
 -- Server=tcp:your-server.database.windows.net,1433;
 -- Initial Catalog=VelocifyDB;
 -- Persist Security Info=False;
@@ -112,6 +128,17 @@ GO
 -- Connection Timeout=30;
 -- Min Pool Size=2;
 -- Max Pool Size=100;
+--
+-- Connection Pooling Parameters Explained:
+-- - Min Pool Size=2: Keeps 2 connections warm to reduce cold start latency
+--   and CPU time on Azure App Service F1 tier (60 min/day CPU quota)
+-- - Max Pool Size=100: Limits connections to prevent memory exhaustion
+--   on F1 tier's 1GB RAM limit
+--
+-- Store this connection string in:
+-- - Azure App Service: Configuration → Application settings → AZURE_SQL_CONNECTION_STRING
+-- - GitHub Secrets: AZURE_SQL_CONNECTION_STRING (for CI/CD)
+-- - Local Development: appsettings.Development.json (DO NOT commit to source control)
 -- =============================================
 
 -- =============================================
@@ -138,9 +165,38 @@ GO
 
 PRINT '=============================================';
 PRINT 'Azure SQL Database setup completed successfully!';
+PRINT '';
 PRINT 'Next steps:';
 PRINT '1. Update the connection string in Azure App Service configuration';
-PRINT '2. Store credentials in Azure Key Vault';
-PRINT '3. Run EF Core migrations: dotnet ef database update';
+PRINT '   - Azure Portal → App Service → Configuration → Application settings';
+PRINT '   - Add: AZURE_SQL_CONNECTION_STRING';
+PRINT '   - CRITICAL: Include Min Pool Size=2;Max Pool Size=100;';
+PRINT '';
+PRINT '2. Store credentials securely:';
+PRINT '   - Azure Key Vault (recommended for production)';
+PRINT '   - GitHub Secrets (for CI/CD deployment)';
+PRINT '   - Never commit credentials to source control';
+PRINT '';
+PRINT '3. Configure Azure SQL firewall:';
+PRINT '   - Azure Portal → SQL Server → Networking';
+PRINT '   - Enable "Allow Azure services and resources to access this server"';
+PRINT '   - Or use Azure CLI:';
+PRINT '     az sql server firewall-rule create --resource-group velocify-rg \';
+PRINT '       --server your-server --name AllowAzureServices \';
+PRINT '       --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0';
+PRINT '';
+PRINT '4. Run EF Core migrations from your backend project:';
+PRINT '   cd backend';
+PRINT '   dotnet ef database update --project Velocify.Infrastructure';
+PRINT '';
+PRINT '5. Verify deployment:';
+PRINT '   - Check health endpoint: https://your-app.azurewebsites.net/health';
+PRINT '   - Monitor database connections in Azure Portal';
+PRINT '   - Review Application Insights for errors';
+PRINT '';
+PRINT 'For detailed setup instructions, see:';
+PRINT '- backend/AZURE-APP-SERVICE-SETUP.md';
+PRINT '- backend/ENVIRONMENT-VARIABLES.md';
+PRINT '- backend/AZURE-F1-TIER-BEST-PRACTICES.md';
 PRINT '=============================================';
 GO

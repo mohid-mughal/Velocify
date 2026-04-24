@@ -257,7 +257,7 @@ public class AutoMapperProfileTests
             {
                 new TaskAuditLog
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 1,
                     FieldName = "Status",
                     OldValue = "Pending",
                     NewValue = "InProgress",
@@ -344,7 +344,7 @@ public class AutoMapperProfileTests
 
         var auditLog = new TaskAuditLog
         {
-            Id = Guid.NewGuid(),
+            Id = 1,
             TaskItemId = Guid.NewGuid(),
             ChangedByUserId = user.Id,
             ChangedBy = user,
