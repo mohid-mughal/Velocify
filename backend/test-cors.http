@@ -1,0 +1,23 @@
+### Test CORS Preflight Request
+OPTIONS https://localhost:5000/api/v1/health
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: Content-Type, Authorization
+
+### Test CORS GET Request
+GET https://localhost:5000/health
+Origin: http://localhost:3000
+
+### Test CORS with Different Origin
+GET https://localhost:5000/health
+Origin: http://localhost:5173
+
+### Test CORS POST Request
+POST https://localhost:5000/api/v1/auth/login
+Origin: http://localhost:3000
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test123!"
+}

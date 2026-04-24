@@ -1,0 +1,13 @@
+### Test 1: Request without correlation ID (should generate one)
+GET http://localhost:5000/weatherforecast
+Accept: application/json
+
+### Test 2: Request with correlation ID (should use provided one)
+GET http://localhost:5000/weatherforecast
+Accept: application/json
+X-Correlation-ID: my-custom-correlation-id-12345
+
+### Test 3: Verify correlation ID in response headers
+GET http://localhost:5000/weatherforecast
+Accept: application/json
+X-Correlation-ID: test-correlation-abc-123

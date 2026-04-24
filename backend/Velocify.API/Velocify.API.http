@@ -1,0 +1,12 @@
+@Velocify.API_HostAddress = http://localhost:5022
+
+GET {{Velocify.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+# Health Check Endpoint
+GET {{Velocify.API_HostAddress}}/health
+Accept: application/json
+
+###
