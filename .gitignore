@@ -51,3 +51,9 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Kiro specs (internal documentation)
+.kiro/
+
+# GitHub workflows (internal CI/CD)
+.github/
