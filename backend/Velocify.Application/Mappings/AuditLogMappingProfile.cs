@@ -9,6 +9,12 @@ public class AuditLogMappingProfile : Profile
     public AuditLogMappingProfile()
     {
         CreateMap<TaskAuditLog, TaskAuditLogDto>()
-            .ForMember(dest => dest.ChangedBy, opt => opt.MapFrom(src => src.ChangedBy));
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.TaskItemId, opt => opt.MapFrom(src => src.TaskItemId))
+            .ForMember(dest => dest.ChangedBy, opt => opt.MapFrom(src => src.ChangedBy))
+            .ForMember(dest => dest.FieldName, opt => opt.MapFrom(src => src.FieldName))
+            .ForMember(dest => dest.OldValue, opt => opt.MapFrom(src => src.OldValue))
+            .ForMember(dest => dest.NewValue, opt => opt.MapFrom(src => src.NewValue))
+            .ForMember(dest => dest.ChangedAt, opt => opt.MapFrom(src => src.ChangedAt));
     }
 }
