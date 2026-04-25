@@ -55,9 +55,6 @@ logs/
 # Kiro specs (internal documentation)
 .kiro/
 
-# GitHub workflows (internal CI/CD)
-.github/
-
 # Task completion and implementation summaries
 *TASK_*.md
 *_IMPLEMENTATION_SUMMARY.md
