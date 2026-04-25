@@ -240,7 +240,7 @@ Create a custom dashboard in Azure Portal with:
 
 - **Azure App Service F1:** $0/month (Free)
 - **Azure SQL Serverless:** ~$5-15/month (depends on usage)
-- **OpenAI API:** ~$0.002 per AI request (varies by model)
+- **Groq API:** Free tier available, competitive pricing
 - **Total Estimated:** ~$5-20/month for low-traffic usage
 
 ### Cost Optimization Tips
@@ -250,8 +250,8 @@ Create a custom dashboard in Azure Portal with:
    - Auto-resumes on connection
    - Only pay for compute when active
 
-2. **OpenAI API:**
-   - Set usage limits in OpenAI dashboard
+2. **Groq API:**
+   - Monitor usage in Groq dashboard
    - Cache AI responses when possible
    - Implement rate limiting
 

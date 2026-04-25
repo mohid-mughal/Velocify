@@ -12,7 +12,7 @@ Configure these in: **Azure Portal → App Service → Configuration → Applica
 | `JWT_SECRET_KEY` | ✅ Yes | `3K8vN2pQ9mR5sT7wX0yZ1aB4cD6eF8gH9iJ0kL2mN4oP6qR8sT0uV2wX4yZ6aB8c` | Generate with `openssl rand -base64 32` |
 | `JWT_ISSUER` | ✅ Yes | `https://velocify-api.azurewebsites.net` | Your backend API URL |
 | `JWT_AUDIENCE` | ✅ Yes | `https://velocify.vercel.app` | Your frontend URL |
-| `LANGCHAIN_API_KEY` | ✅ Yes | `sk-proj-abc123...` | OpenAI API key from https://platform.openai.com/api-keys |
+| `LANGCHAIN_API_KEY` | ✅ Yes | `gsk-abc123...` | Groq API key from https://console.groq.com/keys |
 | `CORS_ALLOWED_ORIGINS` | ✅ Yes | `https://velocify.vercel.app;https://velocify-staging.vercel.app` | Semicolon-separated list of frontend URLs |
 | `ASPNETCORE_ENVIRONMENT` | ⚠️ Auto | `Production` | Automatically set by Azure, do not override |
 

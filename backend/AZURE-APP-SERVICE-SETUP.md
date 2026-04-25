@@ -151,23 +151,24 @@ https://velocify-api.azurewebsites.net
 https://velocify.vercel.app
 ```
 
-#### 5. LangChain/OpenAI API Key
+#### 5. LangChain/Groq API Key
 
 **Name:** `LANGCHAIN_API_KEY`
 
-**Where to get:** https://platform.openai.com/api-keys
+**Where to get:** https://console.groq.com/keys
 
-**Format:** `sk-proj-...`
+**Format:** `gsk-...`
 
 **Example:**
 ```
-sk-proj-abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
+gsk-abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
 ```
 
 **Cost Management:**
-- Set usage limits in OpenAI dashboard (recommended: $10/month)
-- Monitor usage to avoid unexpected charges
+- Monitor usage in Groq dashboard
+- Groq offers competitive pricing and fast inference
 - AI features consume CPU time - be mindful of F1 tier's 60-minute daily limit
+- Model: `openai/gpt-oss-120b`
 
 #### 6. CORS Allowed Origins
 
@@ -197,7 +198,7 @@ az webapp config appsettings set \
     JWT_SECRET_KEY="your-generated-secret-key" \
     JWT_ISSUER="https://velocify-api.azurewebsites.net" \
     JWT_AUDIENCE="https://velocify.vercel.app" \
-    LANGCHAIN_API_KEY="sk-proj-your-api-key" \
+    LANGCHAIN_API_KEY="gsk-your-api-key" \
     CORS_ALLOWED_ORIGINS="https://velocify.vercel.app"
 ```
 
@@ -424,7 +425,7 @@ Your app will be accessible at: `https://velocify-api.azurewebsites.net`
 
 - **Azure App Service F1:** Free
 - **Azure SQL Serverless:** ~$5-15/month (depends on usage)
-- **OpenAI API:** ~$0.002 per AI request (varies by model)
+- **Groq API:** Free tier available, then pay-as-you-go (competitive pricing)
 - **Total estimated:** ~$5-20/month for low-traffic usage
 
 ### Set Up Cost Alerts

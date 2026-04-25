@@ -29,12 +29,12 @@ Before deploying to Azure App Service F1 tier, you need to provide the following
 - **Example:** `https://velocify.vercel.app`
 - **Note:** Use your actual frontend deployment URL
 
-### 5. LangChain/OpenAI API Key
+### 5. LangChain/Groq API Key
 - **Variable Name:** `LANGCHAIN_API_KEY`
-- **What it is:** API key for AI features (OpenAI)
-- **Where to get it:** https://platform.openai.com/api-keys
-- **Format:** `sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-- **Important:** Set usage limits in OpenAI dashboard to control costs
+- **What it is:** API key for AI features (Groq)
+- **Where to get it:** https://console.groq.com/keys
+- **Format:** `gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+- **Important:** Monitor usage in Groq dashboard
 
 ### 6. CORS Allowed Origins
 - **Variable Name:** `CORS_ALLOWED_ORIGINS`
@@ -72,10 +72,10 @@ Before deploying to Azure App Service F1 tier, you need to provide the following
    openssl rand -base64 32
    ```
 
-3. **Get OpenAI API Key**
-   - Sign up at https://platform.openai.com/
+3. **Get Groq API Key**
+   - Sign up at https://console.groq.com/
    - Create API key
-   - Set usage limits (recommended: $10/month)
+   - Monitor usage in dashboard
 
 4. **Configure Azure App Service**
    - Navigate to Azure Portal

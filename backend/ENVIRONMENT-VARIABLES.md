@@ -50,19 +50,20 @@ This document lists all environment variables that must be configured for the Ve
 
 ### LANGCHAIN_API_KEY
 **Required:** Yes  
-**Description:** API key for LangChain/OpenAI services  
-**Format:** String (OpenAI API key format: sk-...)  
-**Example:** `sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`  
+**Description:** API key for Groq AI services (using OpenAI-compatible API)  
+**Format:** String (Groq API key format: gsk_...)  
+**Example:** `gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`  
 **Security Notes:**
-- Obtain from OpenAI platform: https://platform.openai.com/api-keys
+- Obtain from Groq platform: https://console.groq.com/keys
 - Never commit this value to source control
 - Monitor usage to avoid unexpected costs
-- Set usage limits in OpenAI dashboard
+- Set usage limits in Groq dashboard if available
 **Cost Considerations:**
 - Azure F1 tier has 60 mins CPU time per day
 - AI features consume API credits - monitor usage
 - Consider implementing rate limiting for AI endpoints
-- Estimated cost: ~$0.002 per AI request (varies by model)
+- Groq offers competitive pricing compared to OpenAI
+- Model used: `openai/gpt-oss-120b`
 
 ## CORS Configuration
 
