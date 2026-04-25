@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<Application.Interfaces.ITaskRepository, Repositories.TaskRepository>();
         services.AddScoped<Application.Interfaces.IUserRepository, Repositories.UserRepository>();
         services.AddScoped<Application.Interfaces.INotificationService, Repositories.NotificationRepository>();
+        services.AddScoped<Application.Interfaces.IDashboardRepository, Repositories.DashboardRepository>();
 
         // Register services
         services.AddScoped<Application.Interfaces.IJwtTokenService, Services.JwtTokenService>();
@@ -66,6 +67,11 @@ public static class DependencyInjection
         // Runs every 6 hours to recalculate productivity scores for all users
         // Requirements: 7.6, 15.10
         services.AddHostedService<Services.BackgroundServices.ProductivityScoreCalculationService>();
+
+        // Register AutoMapper with all mapping profiles from Application layer
+        // This scans the Application assembly for all classes that inherit from Profile
+        // and registers them with the DI container
+        services.AddAutoMapper(typeof(Application.AssemblyReference).Assembly);
 
         return services;
     }
