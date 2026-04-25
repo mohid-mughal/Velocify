@@ -71,6 +71,7 @@ public static class DependencyInjection
         // Register AutoMapper with all mapping profiles from Application layer
         // This scans the Application assembly for all classes that inherit from Profile
         // and registers them with the DI container
+        // Updated: 2026-04-25 - Ensures all repositories and services can resolve IMapper dependency
         services.AddAutoMapper(typeof(Application.AssemblyReference).Assembly);
 
         return services;
