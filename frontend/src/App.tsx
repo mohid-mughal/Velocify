@@ -12,12 +12,11 @@
  * - SignalR real-time connection
  */
 
-import { Suspense } from 'react';
+import { Suspense, ReactElement } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { routes } from './routes';
 import PrivateRoute from './components/PrivateRoute';
-import { useAuth } from './hooks/useAuth';
 import { useSignalR } from './hooks/useSignalR';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
@@ -84,7 +83,7 @@ function App() {
                   path={route.path}
                   element={
                     <PrivateRoute route={route}>
-                      {route.element}
+                      {route.element as ReactElement}
                     </PrivateRoute>
                   }
                 />
