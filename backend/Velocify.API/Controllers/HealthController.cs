@@ -115,23 +115,24 @@ public class HealthController : ControllerBase
     }
 
     /// <summary>
-    /// Checks LangChain service availability by verifying OpenAI API key configuration.
+    /// Checks LangChain service availability by verifying API key configuration.
+    /// Supports both OpenAI and Groq API keys.
     /// </summary>
     private Task<HealthCheckResult> CheckLangChainServiceAvailability()
     {
         try
         {
-            // Check if OpenAI API key is configured
-            var apiKey = _configuration["OpenAI:ApiKey"];
+            // Check if LangChain API key is configured (supports both OpenAI and Groq)
+            var apiKey = _configuration["LangChain:ApiKey"] ?? _configuration["OpenAI:ApiKey"];
             
             if (string.IsNullOrEmpty(apiKey))
             {
-                _logger.LogWarning("LangChain service check failed: OpenAI API key not configured");
+                _logger.LogWarning("LangChain service check failed: API key not configured");
                 
                 return Task.FromResult(new HealthCheckResult
                 {
                     Healthy = false,
-                    Message = "OpenAI API key not configured"
+                    Message = "LangChain API key not configured"
                 });
             }
 
