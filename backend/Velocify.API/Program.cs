@@ -44,6 +44,7 @@ try
             restrictedToMinimumLevel: LogEventLevel.Information));
 
     // Add services to the container.
+    builder.Services.AddControllers();
     builder.Services.AddInfrastructure(builder.Configuration);
 
     // JWT AUTHENTICATION CONFIGURATION

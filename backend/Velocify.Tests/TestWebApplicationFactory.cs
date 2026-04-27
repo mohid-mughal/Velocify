@@ -22,10 +22,11 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             {
                 ["ConnectionStrings:DefaultConnection"] = "InMemory",
                 ["CorsSettings:AllowedOrigins"] = "http://localhost:3000",
-                ["Jwt:SecretKey"] = "test-secret-key-for-integration-tests-minimum-32-characters",
-                ["Jwt:Issuer"] = "test-issuer",
-                ["Jwt:Audience"] = "test-audience",
-                ["Jwt:ExpiryMinutes"] = "60",
+                ["JwtSettings:SecretKey"] = "test-secret-key-for-integration-tests-minimum-32-characters",
+                ["JwtSettings:Issuer"] = "test-issuer",
+                ["JwtSettings:Audience"] = "test-audience",
+                ["JwtSettings:AccessTokenExpiryMinutes"] = "60",
+                ["JwtSettings:RefreshTokenExpiryDays"] = "7",
                 ["OpenAI:ApiKey"] = "test-api-key",
                 ["OpenAI:Model"] = "gpt-4",
                 ["ASPNETCORE_ENVIRONMENT"] = "Test"
@@ -34,16 +35,13 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
-            // Remove all DbContext-related registrations
-            var descriptorsToRemove = services
-                .Where(d => d.ServiceType == typeof(DbContextOptions<VelocifyDbContext>) ||
-                           d.ServiceType == typeof(DbContextOptions) ||
-                           d.ServiceType == typeof(VelocifyDbContext))
-                .ToList();
+            // Remove the SQL Server DbContext registration added by AddInfrastructure
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<VelocifyDbContext>));
             
-            foreach (var descriptor in descriptorsToRemove)
+            if (dbContextDescriptor != null)
             {
-                services.Remove(descriptor);
+                services.Remove(dbContextDescriptor);
             }
 
             // Add InMemory database for testing
