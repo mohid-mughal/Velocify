@@ -62,3 +62,7 @@ logs/
 *_IMPLEMENTATION_SUMMARY.md
 *_COMPLETION.md
 *CONFIGURATION-SUMMARY.md
+
+# Local deployment checklists with credentials
+*.local.md
+DEPLOYMENT-CHECKLIST.local.md

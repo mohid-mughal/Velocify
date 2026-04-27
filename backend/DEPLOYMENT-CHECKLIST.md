@@ -1,145 +1,117 @@
-# Velocify Backend Deployment Checklist
+# Deployment Checklist
 
-## Required Environment Variables
+Before pushing to GitHub, ensure these secrets are configured:
 
-Before deploying to Azure App Service F1 tier, you need to provide the following environment variables:
+## Required GitHub Secrets
 
-### 1. Database Connection String
-- **Variable Name:** `AZURE_SQL_CONNECTION_STRING`
-- **What it is:** Connection string for your Azure SQL Database
-- **Where to get it:** Azure Portal → SQL Database → Connection strings
-- **Format:** `Server=tcp:{server}.database.windows.net,1433;Initial Catalog={database};User ID={username};Password={password};MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;`
+Go to: **GitHub Repository → Settings → Secrets and variables → Actions**
 
-### 2. JWT Secret Key
-- **Variable Name:** `JWT_SECRET_KEY`
-- **What it is:** Secret key for signing authentication tokens
-- **Where to get it:** Generate a secure random string (minimum 32 characters)
-- **How to generate:** Run `openssl rand -base64 32` in terminal
-- **Example:** `your-production-secret-key-at-least-32-characters-long-change-this`
+### 1. AZURE_SQL_CONNECTION_STRING
+```
+Server=tcp:YOUR-SERVER.database.windows.net,1433;Initial Catalog=YOUR-DATABASE;Persist Security Info=False;User ID=YOUR-USERNAME;Password=YOUR-PASSWORD;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+```
+**Replace with your actual Azure SQL connection string**
 
-### 3. JWT Issuer
-- **Variable Name:** `JWT_ISSUER`
-- **What it is:** Your backend API URL
-- **Example:** `https://velocify-api.azurewebsites.net`
-- **Note:** Use your actual Azure App Service URL
+### 2. AZURE_APP_SERVICE_NAME
+```
+your-app-service-name
+```
+**Replace with your actual Azure App Service name**
 
-### 4. JWT Audience
-- **Variable Name:** `JWT_AUDIENCE`
-- **What it is:** Your frontend application URL
-- **Example:** `https://velocify.vercel.app`
-- **Note:** Use your actual frontend deployment URL
+### 3. AZURE_CREDENTIALS
+Get this from Azure CLI:
+```bash
+az ad sp create-for-rbac --name "velocify-github-actions" \
+  --role contributor \
+  --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+  --sdk-auth
+```
 
-### 5. LangChain/Groq API Key
-- **Variable Name:** `LANGCHAIN_API_KEY`
-- **What it is:** API key for AI features (Groq)
-- **Where to get it:** https://console.groq.com/keys
-- **Format:** `gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-- **Important:** Monitor usage in Groq dashboard
+The output will be JSON - copy the entire JSON object as the secret value.
 
-### 6. CORS Allowed Origins
-- **Variable Name:** `CORS_ALLOWED_ORIGINS`
-- **What it is:** Semicolon-separated list of allowed frontend URLs
-- **Example:** `https://velocify.vercel.app;https://velocify-staging.vercel.app`
-- **Note:** Include all frontend deployment URLs (production, staging, etc.)
+### 4. SONAR_TOKEN (Optional)
+Only needed if you want SonarQube code analysis. Can be added later.
 
-## Configuration Files Created
+## Azure App Service Configuration
 
-✅ **appsettings.json** - Updated with environment variable placeholders  
-✅ **sonar-project.properties** - SonarQube configuration with exclusions for:
-  - Migrations folder (`**/Migrations/**`)
-  - Auto-generated Designer files (`**/*.Designer.cs`)
-  - Model snapshot (`VelocifyDbContextModelSnapshot.cs`)
-  - Build artifacts (`**/bin/**`, `**/obj/**`)
-  - Assembly info files
+Verify in Azure Portal → Your App Service → Configuration:
 
-✅ **ENVIRONMENT-VARIABLES.md** - Comprehensive documentation of all environment variables  
-✅ **DEPLOYMENT-CHECKLIST.md** - This file  
-✅ **AZURE-APP-SERVICE-SETUP.md** - Detailed step-by-step Azure deployment guide  
-✅ **AZURE-CONFIGURATION-REFERENCE.md** - Quick reference for Azure App Service settings  
-✅ **.deployment** - Azure deployment configuration file  
-✅ **web.config** - IIS/Azure App Service configuration with CPU time management comments
+### Connection Strings
+- **Name**: `DefaultConnection`
+- **Value**: Your Azure SQL connection string
+- **Type**: `SQLAzure`
 
-## Next Steps
+### Application Settings
+Add these if not already present:
+- `ASPNETCORE_ENVIRONMENT`: `Production`
+- `Jwt__SecretKey`: (your JWT secret key)
+- `Jwt__Issuer`: `https://velocify-api.azurewebsites.net`
+- `Jwt__Audience`: `https://velocify-api.azurewebsites.net`
+- `OpenAI__ApiKey`: (your OpenAI API key)
+- `CorsSettings__AllowedOrigins`: (your frontend URL)
 
-1. **Create Azure SQL Database**
-   - Use Serverless tier for cost optimization
-   - Configure firewall to allow Azure services
-   - Note the connection string
-   - **See [AZURE-APP-SERVICE-SETUP.md](AZURE-APP-SERVICE-SETUP.md) Step 4 for detailed instructions**
+## Push to GitHub
 
-2. **Generate JWT Secret Key**
-   ```bash
-   openssl rand -base64 32
-   ```
+Once secrets are configured:
 
-3. **Get Groq API Key**
-   - Sign up at https://console.groq.com/
-   - Create API key
-   - Monitor usage in dashboard
+```bash
+git push origin main
+```
 
-4. **Configure Azure App Service**
-   - Navigate to Azure Portal
-   - Go to your App Service → Configuration
-   - Add all environment variables listed above
-   - **CRITICAL:** Ensure connection string includes `Min Pool Size=2;Max Pool Size=100;`
-   - Save and restart
-   - **See [AZURE-CONFIGURATION-REFERENCE.md](AZURE-CONFIGURATION-REFERENCE.md) for quick reference**
-   - **See [AZURE-APP-SERVICE-SETUP.md](AZURE-APP-SERVICE-SETUP.md) for step-by-step guide**
+## Monitor Deployment
 
-5. **Deploy Backend**
-   - Push code to GitHub
-   - GitHub Actions will automatically deploy to Azure App Service
-   - Monitor deployment in Actions tab
-   - **See [AZURE-APP-SERVICE-SETUP.md](AZURE-APP-SERVICE-SETUP.md) Step 5 for deployment instructions**
+1. Go to GitHub → Actions tab
+2. Watch the "Backend CI/CD" workflow
+3. Check both jobs:
+   - ✅ Build, Test, and Analyze
+   - ✅ Deploy to Azure App Service
 
-6. **Verify Deployment**
-   - Check health endpoint: `https://your-app.azurewebsites.net/health`
-   - Test authentication: `POST /api/v1/auth/register`
-   - Monitor logs in Azure Portal
-   - **Monitor CPU time usage** (critical for F1 tier)
-   - **See [AZURE-APP-SERVICE-SETUP.md](AZURE-APP-SERVICE-SETUP.md) Step 6 for verification steps**
+## Verify Deployment
 
-## Azure F1 Tier Limitations
+After successful deployment:
 
-⚠️ **Important:** Azure App Service F1 (Free) tier has limitations:
-- **60 minutes CPU time per day** - Monitor usage in Azure Portal
-- **1 GB RAM** - Connection pooling configured to optimize memory
-- **1 GB disk space** - Logs auto-cleanup after 7 days
-- **No "Always On"** - First request after idle will be slow (cold start)
-- **No custom domains** - Use `*.azurewebsites.net` domain
+1. **Check App Service**: https://velocify-api.azurewebsites.net/health
+2. **Check Database**: Verify migrations applied in Azure Portal
+3. **Check Logs**: Azure Portal → App Service → Log stream
 
-If you exceed these limits, consider upgrading to B1 tier (~$13/month).
+## Troubleshooting
 
-**For detailed Azure App Service setup instructions, see [AZURE-APP-SERVICE-SETUP.md](AZURE-APP-SERVICE-SETUP.md)**
+### If tests fail:
+- Check test output in GitHub Actions
+- Most tests should pass now with InMemory database
+- LocalDB tests are skipped (expected)
 
-## Cost Estimates
+### If deployment fails:
+- Verify all secrets are set correctly
+- Check Azure credentials have proper permissions
+- Review deployment logs in GitHub Actions
 
-- **Azure App Service F1:** Free
-- **Azure SQL Serverless:** ~$5-15/month (depends on usage)
-- **OpenAI API:** ~$0.002 per AI request (varies by model)
-- **Total estimated:** ~$5-20/month for low-traffic usage
+### If migrations fail:
+- Check Azure SQL firewall rules
+- Verify connection string is correct
+- Ensure database user has proper permissions
 
-## Security Reminders
+## Next Steps After Successful Deployment
 
-- ✅ Never commit secrets to source control
-- ✅ Use strong passwords (12+ characters, mixed case, numbers, symbols)
-- ✅ Rotate JWT secret key periodically (quarterly recommended)
-- ✅ Set OpenAI usage limits to prevent unexpected costs
-- ✅ Configure Azure SQL firewall rules properly
-- ✅ Monitor failed authentication attempts
+1. ✅ Test API endpoints
+2. ✅ Verify database schema
+3. ✅ Test authentication flow
+4. ✅ Configure custom domain (optional)
+5. ✅ Set up monitoring and alerts
+6. ✅ Configure Application Insights (optional)
+
+## Important Notes
+
+- **First deployment** may take 5-10 minutes
+- **Migrations** run automatically after deployment
+- **Tests** use InMemory database (not Azure SQL)
+- **Production** uses Azure SQL Server as configured
+- **Free tier** has limitations - monitor usage
 
 ## Support
 
-For detailed information, see:
-- **ENVIRONMENT-VARIABLES.md** - Complete environment variable documentation
-- **Azure App Service docs:** https://docs.microsoft.com/azure/app-service/
-- **OpenAI API docs:** https://platform.openai.com/docs/
-
-## Questions?
-
-If you need help with any of these steps, please provide:
-1. Which environment variable you need help with
-2. What error message you're seeing (if any)
-3. What you've tried so far
-
-I'm here to help! 🚀
+If you encounter issues:
+1. Check GitHub Actions logs
+2. Check Azure App Service logs
+3. Review DATABASE-SETUP.md
+4. Review CI-CD-FIXES.md
