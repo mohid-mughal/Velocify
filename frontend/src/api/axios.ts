@@ -1,9 +1,12 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/authStore';
 
+const envBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '');
+
 // Create axios instance with base URL pointing to backend API
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
+  // Forcing the /api/v1 suffix onto whatever the environment variable is
+  baseURL: envBaseUrl ? `${envBaseUrl}/api/v1` : '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
