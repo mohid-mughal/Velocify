@@ -29,6 +29,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
       <Input
         ref={ref}
         id={name}
+        name={name}
         label={label}
         error={error}
         aria-required={required}
