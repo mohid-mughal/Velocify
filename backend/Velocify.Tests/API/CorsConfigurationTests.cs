@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using Xunit;
@@ -9,11 +8,11 @@ namespace Velocify.Tests.API;
 /// Integration tests for CORS configuration.
 /// Validates: Requirement 29.5
 /// </summary>
-public class CorsConfigurationTests : IClassFixture<WebApplicationFactory<Program>>
+public class CorsConfigurationTests : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TestWebApplicationFactory _factory;
 
-    public CorsConfigurationTests(WebApplicationFactory<Program> factory)
+    public CorsConfigurationTests(TestWebApplicationFactory factory)
     {
         _factory = factory;
     }

@@ -34,12 +34,14 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Install SonarScanner for .NET
+      if: secrets.SONAR_TOKEN != ''
       run: dotnet tool install --global dotnet-sonarscanner
     
     - name: Restore dependencies
       run: dotnet restore backend/Velocify.sln
     
     - name: Begin SonarQube analysis
+      if: env.SONAR_TOKEN != ''
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
@@ -65,6 +67,7 @@ jobs:
           -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
     
     - name: End SonarQube analysis
+      if: env.SONAR_TOKEN != ''
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

@@ -52,11 +52,13 @@ public class HealthControllerTests
     public async Task GetHealth_ShouldReturnServiceUnavailable_WhenDatabaseCheckFails()
     {
         // Arrange
+        // Use a disposed context to simulate database connection failure
         var options = new DbContextOptionsBuilder<VelocifyDbContext>()
-            .UseSqlServer("Server=invalid;Database=invalid;") // Invalid connection string
+            .UseInMemoryDatabase(databaseName: "HealthCheckTestDb_DbFail")
             .Options;
 
-        using var context = new VelocifyDbContext(options);
+        var context = new VelocifyDbContext(options);
+        await context.DisposeAsync(); // Dispose the context to cause connection failures
 
         // Configure OpenAI API key
         _configurationMock.Setup(c => c["OpenAI:ApiKey"]).Returns("test-api-key");

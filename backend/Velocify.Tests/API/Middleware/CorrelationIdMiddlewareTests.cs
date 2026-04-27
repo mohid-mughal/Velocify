@@ -75,12 +75,12 @@ public class CorrelationIdMiddlewareTests
         var expectedCorrelationId = "test-correlation-id";
         context.Request.Headers.Append(CorrelationIdHeaderName, expectedCorrelationId);
 
-        // Simulate response being written
+        // Simulate response being written by writing to the body
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
-            .Returns(async () =>
+            .Returns(async (HttpContext ctx) =>
             {
-                // Trigger OnStarting callbacks
-                await context.Response.StartAsync();
+                // Write to response body to trigger OnStarting callbacks
+                await ctx.Response.WriteAsync("test");
             });
 
         // Act
@@ -145,9 +145,10 @@ public class CorrelationIdMiddlewareTests
         context.Response.Headers.Append(CorrelationIdHeaderName, existingResponseCorrelationId);
 
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
-            .Returns(async () =>
+            .Returns(async (HttpContext ctx) =>
             {
-                await context.Response.StartAsync();
+                // Write to response body to trigger OnStarting callbacks
+                await ctx.Response.WriteAsync("test");
             });
 
         // Act
