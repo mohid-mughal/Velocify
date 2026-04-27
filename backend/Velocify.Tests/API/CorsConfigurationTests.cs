@@ -79,7 +79,8 @@ public class CorsConfigurationTests : IClassFixture<TestWebApplicationFactory>
     public async Task Request_WithMultipleAllowedOrigins_AcceptsAllConfiguredOrigins()
     {
         // Arrange
-        var allowedOrigins = new[] { "http://localhost:3000", "http://localhost:5173", "https://app.example.com" };
+        // Use the same origins configured in CI pipeline (CorsSettings__AllowedOrigins)
+        var allowedOrigins = new[] { "http://localhost:3000", "http://localhost:5173" };
         
         // Create client once outside the loop to avoid Serilog conflicts
         var client = _factory.WithWebHostBuilder(builder =>
