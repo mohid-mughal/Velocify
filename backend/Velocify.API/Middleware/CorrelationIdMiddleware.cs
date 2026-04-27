@@ -34,15 +34,12 @@ public class CorrelationIdMiddleware
         context.TraceIdentifier = correlationId;
 
         // REQUIREMENT 16.3: Include correlation ID in response header
-        // This allows clients to reference the correlation ID when reporting issues
-        context.Response.OnStarting(() =>
+        // IMPORTANT: Set the header BEFORE calling next middleware to ensure it's written
+        // Setting it after await _next() would be too late as response may have started
+        if (!context.Response.Headers.ContainsKey(CorrelationIdHeaderName))
         {
-            if (!context.Response.Headers.ContainsKey(CorrelationIdHeaderName))
-            {
-                context.Response.Headers.Append(CorrelationIdHeaderName, correlationId);
-            }
-            return Task.CompletedTask;
-        });
+            context.Response.Headers.Append(CorrelationIdHeaderName, correlationId);
+        }
 
         // Call the next middleware in the pipeline
         await _next(context);

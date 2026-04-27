@@ -72,23 +72,13 @@ public class CorrelationIdMiddlewareTests
         // Arrange
         var middleware = new CorrelationIdMiddleware(_mockNext.Object);
         var context = new DefaultHttpContext();
-        context.Response.Body = new MemoryStream(); // Add a writable stream
         var expectedCorrelationId = "test-correlation-id";
         context.Request.Headers.Append(CorrelationIdHeaderName, expectedCorrelationId);
 
-        // Simulate response being written by writing to the body
-        _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
-            .Returns(async (HttpContext ctx) =>
-            {
-                // Write to response body to trigger OnStarting callbacks
-                await ctx.Response.WriteAsync("test");
-            });
+        _mockNext.Setup(next => next(It.IsAny<HttpContext>())).Returns(Task.CompletedTask);
 
         // Act
         await middleware.InvokeAsync(context);
-        
-        // Manually trigger OnStarting callbacks by starting the response
-        await context.Response.StartAsync();
 
         // Assert
         // REQUIREMENT 16.3: Verify correlation ID is included in response header
@@ -142,25 +132,16 @@ public class CorrelationIdMiddlewareTests
         // Arrange
         var middleware = new CorrelationIdMiddleware(_mockNext.Object);
         var context = new DefaultHttpContext();
-        context.Response.Body = new MemoryStream(); // Add a writable stream
         var requestCorrelationId = "request-correlation-id";
         var existingResponseCorrelationId = "existing-response-correlation-id";
         
         context.Request.Headers.Append(CorrelationIdHeaderName, requestCorrelationId);
         context.Response.Headers.Append(CorrelationIdHeaderName, existingResponseCorrelationId);
 
-        _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
-            .Returns(async (HttpContext ctx) =>
-            {
-                // Write to response body
-                await ctx.Response.WriteAsync("test");
-            });
+        _mockNext.Setup(next => next(It.IsAny<HttpContext>())).Returns(Task.CompletedTask);
 
         // Act
         await middleware.InvokeAsync(context);
-        
-        // Manually trigger OnStarting callbacks by starting the response
-        await context.Response.StartAsync();
 
         // Assert
         // Verify the existing response header was not overwritten

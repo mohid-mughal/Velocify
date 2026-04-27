@@ -74,6 +74,13 @@ public class ProductivityScoreCalculationService : IHostedService, IDisposable
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<VelocifyDbContext>();
 
+            // Guard: InMemory database doesn't support raw SQL (used in tests)
+            if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                _logger.LogInformation("Skipping productivity score calculation - using InMemory database provider (test environment)");
+                return;
+            }
+
             // REQUIREMENT 7.6: Call stored procedure usp_RecalculateUserProductivityScores
             // This stored procedure calculates productivity score as:
             // (Sum of weighted completed-on-time tasks) / (Total assigned tasks)
