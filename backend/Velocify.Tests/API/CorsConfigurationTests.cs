@@ -81,19 +81,20 @@ public class CorsConfigurationTests : IClassFixture<TestWebApplicationFactory>
         // Arrange
         var allowedOrigins = new[] { "http://localhost:3000", "http://localhost:5173", "https://app.example.com" };
         
+        // Create client once outside the loop to avoid Serilog conflicts
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["CorsSettings:AllowedOrigins"] = string.Join(";", allowedOrigins)
+                });
+            });
+        }).CreateClient();
+        
         foreach (var origin in allowedOrigins)
         {
-            var client = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    config.AddInMemoryCollection(new Dictionary<string, string?>
-                    {
-                        ["CorsSettings:AllowedOrigins"] = string.Join(";", allowedOrigins)
-                    });
-                });
-            }).CreateClient();
-
             var request = new HttpRequestMessage(HttpMethod.Get, "/health");
             request.Headers.Add("Origin", origin);
 
@@ -102,7 +103,8 @@ public class CorsConfigurationTests : IClassFixture<TestWebApplicationFactory>
 
             // Assert
             // REQUIREMENT 29.5: Verify each configured origin is accepted
-            Assert.True(response.Headers.Contains("Access-Control-Allow-Origin"));
+            Assert.True(response.Headers.Contains("Access-Control-Allow-Origin"), 
+                $"Expected Access-Control-Allow-Origin header for origin: {origin}");
             Assert.Equal(origin, response.Headers.GetValues("Access-Control-Allow-Origin").First());
         }
     }
