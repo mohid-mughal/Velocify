@@ -34,7 +34,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Install SonarScanner for .NET
-      if: secrets.SONAR_TOKEN != ''
+      if: env.SONAR_TOKEN != ''
       run: dotnet tool install --global dotnet-sonarscanner
     
     - name: Restore dependencies

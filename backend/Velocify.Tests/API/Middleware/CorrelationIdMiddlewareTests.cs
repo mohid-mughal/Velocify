@@ -72,6 +72,7 @@ public class CorrelationIdMiddlewareTests
         // Arrange
         var middleware = new CorrelationIdMiddleware(_mockNext.Object);
         var context = new DefaultHttpContext();
+        context.Response.Body = new MemoryStream(); // Add a writable stream
         var expectedCorrelationId = "test-correlation-id";
         context.Request.Headers.Append(CorrelationIdHeaderName, expectedCorrelationId);
 
@@ -79,8 +80,9 @@ public class CorrelationIdMiddlewareTests
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
             .Returns(async (HttpContext ctx) =>
             {
-                // Write to response body to trigger OnStarting callbacks
+                // Write to response body and flush to trigger OnStarting callbacks
                 await ctx.Response.WriteAsync("test");
+                await ctx.Response.Body.FlushAsync();
             });
 
         // Act
@@ -138,6 +140,7 @@ public class CorrelationIdMiddlewareTests
         // Arrange
         var middleware = new CorrelationIdMiddleware(_mockNext.Object);
         var context = new DefaultHttpContext();
+        context.Response.Body = new MemoryStream(); // Add a writable stream
         var requestCorrelationId = "request-correlation-id";
         var existingResponseCorrelationId = "existing-response-correlation-id";
         
@@ -147,8 +150,9 @@ public class CorrelationIdMiddlewareTests
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
             .Returns(async (HttpContext ctx) =>
             {
-                // Write to response body to trigger OnStarting callbacks
+                // Write to response body and flush to trigger OnStarting callbacks
                 await ctx.Response.WriteAsync("test");
+                await ctx.Response.Body.FlushAsync();
             });
 
         // Act

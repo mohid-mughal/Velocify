@@ -261,21 +261,30 @@ try
         try
         {
             var context = scope.ServiceProvider.GetRequiredService<Velocify.Infrastructure.Data.VelocifyDbContext>();
-            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
             
-            if (pendingMigrations.Any())
+            // Skip migrations for InMemory database (used in tests)
+            if (!context.Database.IsInMemory())
             {
-                Log.Information("Applying {Count} pending database migrations: {Migrations}", 
-                    pendingMigrations.Count(), 
-                    string.Join(", ", pendingMigrations));
+                var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
                 
-                await context.Database.MigrateAsync();
-                
-                Log.Information("Database migrations applied successfully");
+                if (pendingMigrations.Any())
+                {
+                    Log.Information("Applying {Count} pending database migrations: {Migrations}", 
+                        pendingMigrations.Count(), 
+                        string.Join(", ", pendingMigrations));
+                    
+                    await context.Database.MigrateAsync();
+                    
+                    Log.Information("Database migrations applied successfully");
+                }
+                else
+                {
+                    Log.Information("Database is up-to-date, no pending migrations");
+                }
             }
             else
             {
-                Log.Information("Database is up-to-date, no pending migrations");
+                Log.Information("Using InMemory database, skipping migrations");
             }
         }
         catch (Exception ex)
