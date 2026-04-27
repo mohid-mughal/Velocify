@@ -122,7 +122,7 @@ Azure App Service F1 tier is a **free hosting option** suitable for development,
 
 **Your App URL:**
 ```
-https://velocify-api.azurewebsites.net
+https://velocify.azurewebsites.net
 ```
 
 **Upgrade to B1 or higher for custom domain support.**
@@ -165,7 +165,7 @@ All 6 environment variables must be configured in Azure App Service Configuratio
 
 3. **JWT_ISSUER**
    - Your backend API URL
-   - Example: `https://velocify-api.azurewebsites.net`
+   - Example: `https://velocify.azurewebsites.net`
 
 4. **JWT_AUDIENCE**
    - Your frontend URL

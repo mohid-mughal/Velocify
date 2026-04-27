@@ -42,7 +42,7 @@ Server=tcp:velocify-server-db.database.windows.net,1433;Initial Catalog=velocify
 
 ### 3. JWT_ISSUER
 ```
-https://velocify-api.azurewebsites.net
+https://velocify.azurewebsites.net
 ```
 *(Replace with your actual Azure App Service URL)*
 

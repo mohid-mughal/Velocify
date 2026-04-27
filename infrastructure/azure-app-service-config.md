@@ -18,7 +18,7 @@ This document provides step-by-step instructions for configuring Azure App Servi
 3. Configure the following settings:
    - **Subscription**: Select your subscription
    - **Resource Group**: Create new or select existing (e.g., `velocify-rg`)
-   - **Name**: `velocify-api` (must be globally unique)
+   - **Name**: `velocify` (must be globally unique)
    - **Publish**: Code
    - **Runtime stack**: .NET 8 (LTS)
    - **Operating System**: Linux
@@ -45,7 +45,7 @@ az appservice plan create \
 
 # Create Web App
 az webapp create \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --plan velocify-plan \
   --runtime "DOTNETCORE:8.0"
@@ -61,8 +61,8 @@ Add these configuration settings in Azure Portal → App Service → Configurati
 |------|-------|-------------|
 | `ConnectionStrings__DefaultConnection` | `Server=tcp:your-server.database.windows.net,1433;Initial Catalog=VelocifyDB;User ID=VelocifyAppUser;Password={password};MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;` | Azure SQL connection string |
 | `JwtSettings__SecretKey` | `{generate-secure-key}` | JWT signing key (min 32 characters) |
-| `JwtSettings__Issuer` | `https://velocify-api.azurewebsites.net` | JWT issuer |
-| `JwtSettings__Audience` | `https://velocify-api.azurewebsites.net` | JWT audience |
+| `JwtSettings__Issuer` | `https://velocify.azurewebsites.net` | JWT issuer |
+| `JwtSettings__Audience` | `https://velocify.azurewebsites.net` | JWT audience |
 | `JwtSettings__AccessTokenExpirationMinutes` | `15` | Access token TTL |
 | `JwtSettings__RefreshTokenExpirationDays` | `7` | Refresh token TTL |
 | `LangChain__ApiKey` | `{your-openai-api-key}` | OpenAI API key for LangChain |
@@ -84,19 +84,19 @@ Add these configuration settings in Azure Portal → App Service → Configurati
 ```bash
 # Set connection string
 az webapp config connection-string set \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --connection-string-type SQLAzure \
   --settings DefaultConnection="Server=tcp:your-server.database.windows.net,1433;Initial Catalog=VelocifyDB;User ID=VelocifyAppUser;Password={password};MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;"
 
 # Set application settings
 az webapp config appsettings set \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --settings \
     JwtSettings__SecretKey="{generate-secure-key}" \
-    JwtSettings__Issuer="https://velocify-api.azurewebsites.net" \
-    JwtSettings__Audience="https://velocify-api.azurewebsites.net" \
+    JwtSettings__Issuer="https://velocify.azurewebsites.net" \
+    JwtSettings__Audience="https://velocify.azurewebsites.net" \
     JwtSettings__AccessTokenExpirationMinutes="15" \
     JwtSettings__RefreshTokenExpirationDays="7" \
     LangChain__ApiKey="{your-openai-api-key}" \
@@ -137,7 +137,7 @@ dotnet publish Velocify.API/Velocify.API.csproj -c Release -o ./publish
 
 # Deploy to Azure
 az webapp deployment source config-zip \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --src ./publish.zip
 ```
@@ -171,7 +171,7 @@ az monitor app-insights component show \
 
 # Add to App Service settings
 az webapp config appsettings set \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --settings ApplicationInsights__InstrumentationKey="{instrumentation-key}"
 ```
@@ -219,7 +219,7 @@ az webapp config appsettings set \
 3. Click "+ Add custom domain"
 4. Enter your domain name
 5. Add DNS records as instructed:
-   - CNAME: `www` → `velocify-api.azurewebsites.net`
+   - CNAME: `www` → `velocify.azurewebsites.net`
    - TXT: `asuid` → `{verification-id}`
 6. Click "Validate" → "Add"
 
@@ -264,9 +264,9 @@ dotnet ef database update \
 
 ## 10. Verify Deployment
 
-1. Navigate to `https://velocify-api.azurewebsites.net/health`
+1. Navigate to `https://velocify.azurewebsites.net/health`
 2. Should return 200 OK with health check status
-3. Navigate to `https://velocify-api.azurewebsites.net/swagger`
+3. Navigate to `https://velocify.azurewebsites.net/swagger`
 4. Should display Swagger UI with API documentation
 5. Test authentication endpoint: POST `/api/v1/auth/register`
 
@@ -288,10 +288,10 @@ dotnet ef database update \
 
 ```bash
 # Stream logs in real-time
-az webapp log tail --name velocify-api --resource-group velocify-rg
+az webapp log tail --name velocify --resource-group velocify-rg
 
 # Download logs
-az webapp log download --name velocify-api --resource-group velocify-rg
+az webapp log download --name velocify --resource-group velocify-rg
 ```
 
 ### Common Issues

@@ -5,6 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Velocify.Infrastructure.Data;
 
+// DISABLE XUNIT PARALLELIZATION TO PREVENT SERILOG "LOGGER ALREADY FROZEN" ERRORS
+// 
+// When xUnit runs tests in parallel, multiple WebApplicationFactory instances try to
+// initialize Serilog's global static logger simultaneously, causing race conditions.
+// By disabling parallelization, tests run sequentially, preventing Serilog conflicts.
+// 
+// Performance impact: Minimal - tests are fast and complete in ~36 seconds sequentially.
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace Velocify.Tests;
 
 /// <summary>

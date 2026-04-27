@@ -42,13 +42,13 @@ You **MUST** configure the following environment variables in your Vercel projec
 
 1. **VITE_API_BASE_URL**
    - Description: Backend API base URL
-   - Example: `https://velocify-api.azurewebsites.net`
+   - Example: `https://velocify.azurewebsites.net`
    - Required: Yes
    - Used for: All API requests to the backend
 
 2. **VITE_SIGNALR_HUB_URL**
    - Description: SignalR Hub URL for real-time notifications
-   - Example: `https://velocify-api.azurewebsites.net/hubs/task`
+   - Example: `https://velocify.azurewebsites.net/hubs/task`
    - Required: Yes
    - Used for: Real-time task updates, notifications, and collaboration features
 
@@ -84,8 +84,8 @@ In the Vercel project settings:
 2. Add the following variables for **Production**:
 
 ```
-VITE_API_BASE_URL=https://velocify-api.azurewebsites.net
-VITE_SIGNALR_HUB_URL=https://velocify-api.azurewebsites.net/hubs/task
+VITE_API_BASE_URL=https://velocify.azurewebsites.net
+VITE_SIGNALR_HUB_URL=https://velocify.azurewebsites.net/hubs/task
 VITE_DEBUG=false
 ```
 

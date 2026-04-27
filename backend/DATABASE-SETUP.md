@@ -48,7 +48,7 @@ For the CI/CD pipeline to work, you need to configure these secrets in your GitH
 
 2. **AZURE_APP_SERVICE_NAME**
    ```
-   velocify-api
+   velocify
    ```
    (or whatever your App Service name is)
 

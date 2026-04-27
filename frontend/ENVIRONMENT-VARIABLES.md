@@ -22,8 +22,8 @@ This document lists all required and optional environment variables for the Velo
 
 **Examples**:
 - Local development: `http://localhost:5000`
-- Production: `https://velocify-api.azurewebsites.net`
-- Staging: `https://velocify-api-staging.azurewebsites.net`
+- Production: `https://velocify.azurewebsites.net`
+- Staging: `https://velocify-staging.azurewebsites.net`
 
 **Usage**: Used by the API client to make HTTP requests to the backend
 
@@ -43,8 +43,8 @@ This document lists all required and optional environment variables for the Velo
 
 **Examples**:
 - Local development: `http://localhost:5000/hubs/task`
-- Production: `https://velocify-api.azurewebsites.net/hubs/task`
-- Staging: `https://velocify-api-staging.azurewebsites.net/hubs/task`
+- Production: `https://velocify.azurewebsites.net/hubs/task`
+- Staging: `https://velocify-staging.azurewebsites.net/hubs/task`
 
 **Usage**: Used by the SignalR client to establish WebSocket connections for real-time features:
 - Task assignment notifications
@@ -105,8 +105,8 @@ Set in Vercel Dashboard → Project Settings → Environment Variables:
 
 | Variable Name | Value | Environment |
 |--------------|-------|-------------|
-| `VITE_API_BASE_URL` | `https://velocify-api.azurewebsites.net` | Production |
-| `VITE_SIGNALR_HUB_URL` | `https://velocify-api.azurewebsites.net/hubs/task` | Production |
+| `VITE_API_BASE_URL` | `https://velocify.azurewebsites.net` | Production |
+| `VITE_SIGNALR_HUB_URL` | `https://velocify.azurewebsites.net/hubs/task` | Production |
 | `VITE_DEBUG` | `false` | Production |
 
 ### Vercel Preview (Optional)
@@ -115,8 +115,8 @@ Set in Vercel Dashboard → Project Settings → Environment Variables:
 
 | Variable Name | Value | Environment |
 |--------------|-------|-------------|
-| `VITE_API_BASE_URL` | `https://velocify-api-staging.azurewebsites.net` | Preview |
-| `VITE_SIGNALR_HUB_URL` | `https://velocify-api-staging.azurewebsites.net/hubs/task` | Preview |
+| `VITE_API_BASE_URL` | `https://velocify-staging.azurewebsites.net` | Preview |
+| `VITE_SIGNALR_HUB_URL` | `https://velocify-staging.azurewebsites.net/hubs/task` | Preview |
 | `VITE_DEBUG` | `true` | Preview |
 
 ---

@@ -57,7 +57,7 @@ Configure the following secrets in your GitHub repository settings (`Settings > 
 |-------------|-------------|---------|
 | `SONAR_TOKEN` | SonarCloud authentication token | `sqp_xxxxxxxxxxxxx` |
 | `AZURE_CREDENTIALS` | Azure service principal credentials (JSON) | `{"clientId":"...","clientSecret":"...","subscriptionId":"...","tenantId":"..."}` |
-| `AZURE_APP_SERVICE_NAME` | Name of the Azure App Service | `velocify-api` |
+| `AZURE_APP_SERVICE_NAME` | Name of the Azure App Service | `velocify` |
 | `AZURE_SQL_CONNECTION_STRING` | Connection string for Azure SQL Database | `Server=tcp:velocify.database.windows.net,1433;Initial Catalog=velocify;...` |
 
 ### Frontend Secrets
@@ -65,8 +65,8 @@ Configure the following secrets in your GitHub repository settings (`Settings > 
 | Secret Name | Description | Example |
 |-------------|-------------|---------|
 | `SONAR_TOKEN` | SonarCloud authentication token (same as backend) | `sqp_xxxxxxxxxxxxx` |
-| `VITE_API_BASE_URL` | Production API base URL | `https://velocify-api.azurewebsites.net` |
-| `VITE_SIGNALR_HUB_URL` | Production SignalR hub URL | `https://velocify-api.azurewebsites.net/hubs/tasks` |
+| `VITE_API_BASE_URL` | Production API base URL | `https://velocify.azurewebsites.net` |
+| `VITE_SIGNALR_HUB_URL` | Production SignalR hub URL | `https://velocify.azurewebsites.net/hubs/tasks` |
 | `VERCEL_TOKEN` | Vercel deployment token | `xxxxxxxxxxxxx` |
 | `VERCEL_ORG_ID` | Vercel organization ID | `team_xxxxxxxxxxxxx` |
 | `VERCEL_PROJECT_ID` | Vercel project ID | `prj_xxxxxxxxxxxxx` |

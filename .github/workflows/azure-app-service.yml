@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: velocify-api
+  AZURE_WEBAPP_NAME: velocify
   AZURE_WEBAPP_PACKAGE_PATH: './backend'
   DOTNET_VERSION: '8.0.x'
 

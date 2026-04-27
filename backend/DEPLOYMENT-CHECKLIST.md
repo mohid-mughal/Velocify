@@ -42,13 +42,14 @@ Verify in Azure Portal → Your App Service → Configuration:
 - **Type**: `SQLAzure`
 
 ### Application Settings
-Add these if not already present:
+Add these if not already present (use double underscores `__` for nested keys):
 - `ASPNETCORE_ENVIRONMENT`: `Production`
-- `Jwt__SecretKey`: (your JWT secret key)
-- `Jwt__Issuer`: `https://velocify-api.azurewebsites.net`
-- `Jwt__Audience`: `https://velocify-api.azurewebsites.net`
-- `OpenAI__ApiKey`: (your OpenAI API key)
-- `CorsSettings__AllowedOrigins`: (your frontend URL)
+- `JwtSettings__SecretKey`: (your JWT secret key, min 32 chars)
+- `JwtSettings__Issuer`: `https://velocify.azurewebsites.net`
+- `JwtSettings__Audience`: `https://velocify.vercel.app`
+- `LangChain__ApiKey`: (your Groq or OpenAI API key)
+- `LangChain__Model`: `openai/gpt-oss-120b` (for Groq) or `gpt-3.5-turbo` (for OpenAI)
+- `CorsSettings__AllowedOrigins`: (your frontend URL, comma-separated)
 
 ## Push to GitHub
 
@@ -70,7 +71,7 @@ git push origin main
 
 After successful deployment:
 
-1. **Check App Service**: https://velocify-api.azurewebsites.net/health
+1. **Check App Service**: https://velocify.azurewebsites.net/health
 2. **Check Database**: Verify migrations applied in Azure Portal
 3. **Check Logs**: Azure Portal → App Service → Log stream
 

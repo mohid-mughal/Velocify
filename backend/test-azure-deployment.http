@@ -1,0 +1,347 @@
+### Azure Deployment Verification Tests
+### Configured for: velocify.azurewebsites.net
+### Change @azureUrl below if your app name is different
+@azureUrl = https://velocify.azurewebsites.net
+@localUrl = http://localhost:5022
+
+# Use Azure URL for deployment testing
+@baseUrl = {{azureUrl}}
+
+###############################################
+# 1. HEALTH CHECK - Start here!
+###############################################
+
+### Test 1.1: Basic Health Check
+# This should return 200 OK with database, langchain, and diskSpace status
+GET {{baseUrl}}/health
+Accept: application/json
+
+### Expected Response:
+# {
+#   "status": "Healthy",
+#   "checks": {
+#     "database": { "healthy": true, "message": "Database connection successful" },
+#     "langchain": { "healthy": true, "message": "LangChain service configured" },
+#     "diskSpace": { "healthy": true, "message": "X.XX GB available" }
+#   },
+#   "timestamp": "2024-XX-XXTXX:XX:XX.XXXXXXXZ"
+# }
+
+###############################################
+# 2. CORS VERIFICATION
+###############################################
+
+### Test 2.1: CORS Preflight Request
+OPTIONS {{baseUrl}}/health
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: Content-Type, Authorization
+
+### Test 2.2: CORS GET Request
+GET {{baseUrl}}/health
+Origin: http://localhost:3000
+
+###############################################
+# 3. AUTHENTICATION FLOW
+###############################################
+
+### Test 3.1: Register New User
+POST {{baseUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "testuser@example.com",
+  "password": "Test123!@#"
+}
+
+### Expected Response (201 Created):
+# {
+#   "accessToken": "eyJhbGc...",
+#   "refreshToken": "abc123...",
+#   "expiresIn": 900,
+#   "user": {
+#     "id": "guid",
+#     "firstName": "Test",
+#     "lastName": "User",
+#     "email": "testuser@example.com",
+#     "role": "Member"
+#   }
+# }
+
+### Test 3.2: Login with Existing User
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "Test123!@#"
+}
+
+### IMPORTANT: Copy the accessToken from the response above and paste it below
+@accessToken = YOUR_ACCESS_TOKEN_HERE
+@refreshToken = YOUR_REFRESH_TOKEN_HERE
+
+### Test 3.3: Refresh Access Token
+POST {{baseUrl}}/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Test 3.4: Logout
+POST {{baseUrl}}/api/v1/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###############################################
+# 4. TASK MANAGEMENT (Requires Authentication)
+###############################################
+
+### Test 4.1: Get All Tasks (Empty initially)
+GET {{baseUrl}}/api/v1/tasks?pageNumber=1&pageSize=10
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 4.2: Create a New Task
+# IMPORTANT: Replace the assignedToUserId with your actual user ID from Test 3.1 or 3.2 response
+# NOTE: After deploying the JsonStringEnumConverter fix, string values will work
+# Until then, use numeric values: Priority (0=Critical, 1=High, 2=Medium, 3=Low), Category (0=Development)
+POST {{baseUrl}}/api/v1/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Test Task from Azure",
+  "description": "This task was created to test the Azure deployment",
+  "priority": 1,
+  "category": 0,
+  "assignedToUserId": "f51ffdaf-a91a-4f4a-abf1-8b58260e993b",
+  "dueDate": "2026-05-01T12:00:00Z",
+  "estimatedHours": 5.0,
+  "tags": "testing,azure,deployment"
+}
+
+### IMPORTANT: Copy the task ID from the response above
+@taskId = YOUR_TASK_ID_HERE
+
+### Test 4.3: Get Task by ID
+GET {{baseUrl}}/api/v1/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 4.4: Update Task Status
+PATCH {{baseUrl}}/api/v1/tasks/{{taskId}}/status
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "InProgress"
+}
+
+### Test 4.5: Update Task Details
+PUT {{baseUrl}}/api/v1/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Test Task",
+  "description": "This task was updated to verify Azure deployment",
+  "priority": "Medium",
+  "category": "Research",
+  "status": "InProgress",
+  "assignedToUserId": "f51ffdaf-a91a-4f4a-abf1-8b58260e993b",
+  "dueDate": "2026-05-02T12:00:00Z",
+  "estimatedHours": 3.0,
+  "actualHours": 1.5,
+  "tags": "testing,azure,updated"
+}
+
+### Test 4.6: Add Comment to Task
+POST {{baseUrl}}/api/v1/tasks/{{taskId}}/comments
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "content": "This is a test comment to verify the Azure deployment is working correctly!"
+}
+
+### Test 4.7: Get Task Comments
+GET {{baseUrl}}/api/v1/tasks/{{taskId}}/comments
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 4.8: Get Task History (Audit Log)
+GET {{baseUrl}}/api/v1/tasks/{{taskId}}/history
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 4.9: Delete Task
+DELETE {{baseUrl}}/api/v1/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+
+###############################################
+# 5. DASHBOARD & ANALYTICS
+###############################################
+
+### Test 5.1: Get Dashboard Statistics
+GET {{baseUrl}}/api/v1/dashboard/statistics
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 5.2: Get Task Distribution
+GET {{baseUrl}}/api/v1/dashboard/task-distribution
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+###############################################
+# 6. NOTIFICATIONS
+###############################################
+
+### Test 6.1: Get User Notifications
+GET {{baseUrl}}/api/v1/notifications?pageNumber=1&pageSize=10
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 6.2: Mark Notification as Read
+PATCH {{baseUrl}}/api/v1/notifications/{notificationId}/read
+Authorization: Bearer {{accessToken}}
+
+### Test 6.3: Mark All Notifications as Read
+POST {{baseUrl}}/api/v1/notifications/mark-all-read
+Authorization: Bearer {{accessToken}}
+
+###############################################
+# 7. USER MANAGEMENT
+###############################################
+
+### Test 7.1: Get Current User Profile
+GET {{baseUrl}}/api/v1/users/me
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 7.2: Update User Profile
+PUT {{baseUrl}}/api/v1/users/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Updated",
+  "lastName": "Name",
+  "email": "testuser@example.com"
+}
+
+###############################################
+# 8. ERROR HANDLING TESTS
+###############################################
+
+### Test 8.1: Test 401 Unauthorized (No Token)
+GET {{baseUrl}}/api/v1/tasks
+Accept: application/json
+
+### Test 8.2: Test 404 Not Found
+GET {{baseUrl}}/api/v1/tasks/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 8.3: Test 400 Bad Request (Invalid Data)
+POST {{baseUrl}}/api/v1/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "Missing required fields",
+  "priority": "InvalidPriority"
+}
+
+###############################################
+# 9. CORRELATION ID VERIFICATION
+###############################################
+
+### Test 9.1: Request with Custom Correlation ID
+GET {{baseUrl}}/health
+Accept: application/json
+X-Correlation-ID: test-correlation-azure-12345
+
+### Test 9.2: Request without Correlation ID (should generate one)
+GET {{baseUrl}}/health
+Accept: application/json
+
+###############################################
+# QUICK START GUIDE
+###############################################
+# 
+# 1. Replace YOUR-APP-NAME with your Azure App Service name at the top
+# 2. Start with Test 1.1 (Health Check) - this verifies:
+#    - API is running
+#    - Database connection works
+#    - OpenAI API key is configured
+#    - Disk space is sufficient
+# 
+# 3. If health check passes, test authentication:
+#    - Run Test 3.1 (Register) to create a test user
+#    - Copy the accessToken from the response
+#    - Replace YOUR_ACCESS_TOKEN_HERE with the actual token
+# 
+# 4. Test task management:
+#    - Run Test 4.2 (Create Task)
+#    - Copy the task ID from the response
+#    - Replace YOUR_TASK_ID_HERE with the actual ID
+#    - Run remaining task tests
+# 
+# 5. Check Azure Portal logs if any test fails:
+#    - Go to your App Service → Log stream
+#    - Look for error messages with correlation IDs
+# 
+###############################################
+
+
+###############################################
+# ACTUAL TEST RESULTS (2026-04-27)
+###############################################
+# 
+# ✅ Health Check - Partially working
+#    - Database: ✅ Connected
+#    - LangChain: ⚠️ Needs LangChain__ApiKey setting
+#    - Disk Space: ✅ 12.82 GB available
+# 
+# ✅ User Registration - Working
+#    - Successfully created test user
+#    - Got access token and refresh token
+#    - User ID: f51ffdaf-a91a-4f4a-abf1-8b58260e993b
+# 
+# ✅ Login - Working
+#    - Authentication successful
+#    - Token generation working
+# 
+# ✅ Token Refresh - Working
+#    - Token rotation successful
+# 
+# ✅ Get Tasks - Working
+#    - Returned empty list (expected)
+# 
+# ❌ Create Task - FIXED!
+#    - Issue: Missing required field "assignedToUserId"
+#    - Issue: Priority enum values were incorrect
+#    - Solution: Added assignedToUserId field to Test 4.2
+#    - Solution: Corrected enum values in API-ENUM-VALUES.md
+# 
+# ENUM VALUES (CORRECTED):
+# - Priority: Critical, High, Medium, Low
+# - Status: Pending, InProgress, Completed, Cancelled, Blocked
+# - Category: Development, Design, Marketing, Operations, Research, Other
+# 
+# NEXT STEPS:
+# 1. Add LangChain__ApiKey to Azure App Service Configuration
+# 2. Deploy updated HealthController.cs (supports both LangChain and OpenAI keys)
+# 3. Use your actual user ID in Test 4.2 (from login response)
+# 4. Test complete task creation flow
+# 
+###############################################

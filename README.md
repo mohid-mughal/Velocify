@@ -159,7 +159,7 @@ npm run test
    az appservice plan create --name velocify-plan --resource-group velocify-rg --sku F1 --is-linux
 
    # Create Web App
-   az webapp create --name velocify-api --resource-group velocify-rg --plan velocify-plan --runtime "DOTNETCORE:8.0"
+   az webapp create --name velocify --resource-group velocify-rg --plan velocify-plan --runtime "DOTNETCORE:8.0"
    ```
 
 2. Configure application settings (see `infrastructure/azure-app-service-config.md`)

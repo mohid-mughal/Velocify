@@ -45,7 +45,7 @@ This guide walks you through deploying the Velocify backend to Azure App Service
 3. Fill in the details:
    - **Subscription:** Your Azure subscription
    - **Resource Group:** Create new or use existing (e.g., `velocify-rg`)
-   - **Name:** `velocify-api` (must be globally unique)
+   - **Name:** `velocify` (must be globally unique)
    - **Publish:** Code
    - **Runtime stack:** .NET 8 (LTS)
    - **Operating System:** Linux (recommended) or Windows
@@ -72,7 +72,7 @@ az appservice plan create \
 
 # Create Web App
 az webapp create \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --plan velocify-plan \
   --runtime "DOTNETCORE:8.0"
@@ -137,7 +137,7 @@ openssl rand -base64 32
 
 **Example:**
 ```
-https://velocify-api.azurewebsites.net
+https://velocify.azurewebsites.net
 ```
 
 #### 4. JWT Audience
@@ -191,12 +191,12 @@ https://velocify.vercel.app;https://velocify-staging.vercel.app
 ```bash
 # Set all environment variables at once
 az webapp config appsettings set \
-  --name velocify-api \
+  --name velocify \
   --resource-group velocify-rg \
   --settings \
     AZURE_SQL_CONNECTION_STRING="Server=tcp:velocify-sql.database.windows.net,1433;Initial Catalog=VelocifyDb;User ID=velocifyadmin;Password=YourPassword123!;MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;" \
     JWT_SECRET_KEY="your-generated-secret-key" \
-    JWT_ISSUER="https://velocify-api.azurewebsites.net" \
+    JWT_ISSUER="https://velocify.azurewebsites.net" \
     JWT_AUDIENCE="https://velocify.vercel.app" \
     LANGCHAIN_API_KEY="gsk-your-api-key" \
     CORS_ALLOWED_ORIGINS="https://velocify.vercel.app"
@@ -285,7 +285,7 @@ dotnet publish Velocify.API/Velocify.API.csproj \
 # Deploy using Azure CLI
 az webapp deployment source config-zip \
   --resource-group velocify-rg \
-  --name velocify-api \
+  --name velocify \
   --src ./publish.zip
 ```
 
@@ -294,7 +294,7 @@ az webapp deployment source config-zip \
 ### Check Health Endpoint
 
 ```bash
-curl https://velocify-api.azurewebsites.net/health
+curl https://velocify.azurewebsites.net/health
 ```
 
 Expected response:
@@ -313,7 +313,7 @@ Expected response:
 
 ```bash
 # Register a new user
-curl -X POST https://velocify-api.azurewebsites.net/api/v1/auth/register \
+curl -X POST https://velocify.azurewebsites.net/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "firstName": "Test",
@@ -328,7 +328,7 @@ curl -X POST https://velocify-api.azurewebsites.net/api/v1/auth/register \
 1. Azure Portal → Your App Service → Log stream
 2. Or use Azure CLI:
    ```bash
-   az webapp log tail --name velocify-api --resource-group velocify-rg
+   az webapp log tail --name velocify --resource-group velocify-rg
    ```
 
 ## Step 7: Monitor CPU Time Usage (Critical for F1 Tier)
@@ -369,7 +369,7 @@ Your app will stop responding until midnight UTC when the quota resets.
 
 Custom domains are NOT available on F1 tier. You must upgrade to B1 or higher.
 
-Your app will be accessible at: `https://velocify-api.azurewebsites.net`
+Your app will be accessible at: `https://velocify.azurewebsites.net`
 
 ## Troubleshooting
 
