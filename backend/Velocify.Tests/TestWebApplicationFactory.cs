@@ -15,13 +15,16 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // IMPORTANT: We need to OVERRIDE appsettings.json which contains placeholder values like "${CORS_ALLOWED_ORIGINS}"
+        // By adding our configuration LAST, it takes precedence over appsettings.json
         builder.ConfigureAppConfiguration((context, config) =>
         {
-            // Add test-specific configuration
             // Read CORS_ALLOWED_ORIGINS from environment variable if available
             var corsOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS") 
-                ?? "http://localhost:3000";
+                ?? "http://localhost:3000,http://localhost:5173";
             
+            // Add test-specific configuration with HIGHEST priority
+            // This will override the ${CORS_ALLOWED_ORIGINS} placeholder in appsettings.json
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:DefaultConnection"] = "InMemory",
