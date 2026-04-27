@@ -38,7 +38,7 @@ Based on your setup, here are your environment variables:
 ```
 ConnectionStrings__DefaultConnection = (your Azure SQL connection string)
 CorsSettings__AllowedOrigins = (your frontend URLs)
-JwtSettings__Audience = https://velocify.vercel.app
+JwtSettings__Audience = https://veelocify.vercel.app
 JwtSettings__Issuer = https://velocify.azurewebsites.net
 JwtSettings__SecretKey = (your secret key)
 LangChain__ApiKey = gsk_YOUR_GROQ_API_KEY_HERE

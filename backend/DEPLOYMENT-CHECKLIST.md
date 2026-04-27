@@ -46,7 +46,7 @@ Add these if not already present (use double underscores `__` for nested keys):
 - `ASPNETCORE_ENVIRONMENT`: `Production`
 - `JwtSettings__SecretKey`: (your JWT secret key, min 32 chars)
 - `JwtSettings__Issuer`: `https://velocify.azurewebsites.net`
-- `JwtSettings__Audience`: `https://velocify.vercel.app`
+- `JwtSettings__Audience`: `https://veelocify.vercel.app`
 - `LangChain__ApiKey`: (your Groq or OpenAI API key)
 - `LangChain__Model`: `openai/gpt-oss-120b` (for Groq) or `gpt-3.5-turbo` (for OpenAI)
 - `CorsSettings__AllowedOrigins`: (your frontend URL, comma-separated)

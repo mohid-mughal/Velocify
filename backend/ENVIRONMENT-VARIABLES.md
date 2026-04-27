@@ -75,7 +75,7 @@ Server=tcp:YOUR-SERVER.database.windows.net,1433;Initial Catalog=YOUR-DATABASE;P
 **Description**: JWT token audience (typically your frontend URL)  
 **Example**: 
 - Local: `https://localhost:3000`
-- Azure: `https://velocify.vercel.app`
+- Azure: `https://veelocify.vercel.app`
 
 ### `JwtSettings__AccessTokenExpirationMinutes` (Azure) / `JwtSettings:AccessTokenExpirationMinutes` (Local)
 **Required**: No  
@@ -127,7 +127,7 @@ gpt-4-turbo
 ### `CorsSettings__AllowedOrigins` (Azure) / `CorsSettings:AllowedOrigins` (Local)
 **Required**: Yes  
 **Description**: Comma-separated list of allowed origins for CORS  
-**Example**: `https://localhost:3000,https://localhost:5173,https://velocify.vercel.app`
+**Example**: `https://localhost:3000,https://localhost:5173,https://veelocify.vercel.app`
 
 ## Logging Configuration
 
@@ -199,10 +199,10 @@ In Azure Portal → App Service → Configuration:
 ASPNETCORE_ENVIRONMENT = Production
 JwtSettings__SecretKey = your-super-secret-jwt-key-min-32-chars-long
 JwtSettings__Issuer = https://velocify.azurewebsites.net
-JwtSettings__Audience = https://velocify.vercel.app
+JwtSettings__Audience = https://veelocify.vercel.app
 LangChain__ApiKey = gsk_YOUR_GROQ_API_KEY_HERE
 LangChain__Model = openai/gpt-oss-120b
-CorsSettings__AllowedOrigins = https://velocify.vercel.app,https://localhost:3000
+CorsSettings__AllowedOrigins = https://veelocify.vercel.app,https://localhost:3000
 ```
 
 **Note**: Use double underscores (`__`) for nested keys in Azure App Service Application Settings.
@@ -248,10 +248,10 @@ To set environment variables in Azure App Service:
 az webapp config appsettings set --name velocify --resource-group YOUR-RESOURCE-GROUP --settings \
   "JwtSettings__SecretKey=your-secret-key" \
   "JwtSettings__Issuer=https://velocify.azurewebsites.net" \
-  "JwtSettings__Audience=https://velocify.vercel.app" \
+  "JwtSettings__Audience=https://veelocify.vercel.app" \
   "LangChain__ApiKey=gsk_..." \
   "LangChain__Model=openai/gpt-oss-120b" \
-  "CorsSettings__AllowedOrigins=https://velocify.vercel.app"
+  "CorsSettings__AllowedOrigins=https://veelocify.vercel.app"
 ```
 
 ## Security Checklist

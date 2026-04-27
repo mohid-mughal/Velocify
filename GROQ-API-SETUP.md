@@ -48,7 +48,7 @@ https://velocify.azurewebsites.net
 
 ### 4. JWT_AUDIENCE
 ```
-https://velocify.vercel.app
+https://veelocify.vercel.app
 ```
 *(Replace with your actual Vercel frontend URL)*
 
@@ -60,7 +60,7 @@ gsk_YOUR_GROQ_API_KEY_HERE
 
 ### 6. CORS_ALLOWED_ORIGINS
 ```
-https://velocify.vercel.app
+https://veelocify.vercel.app
 ```
 *(Replace with your actual Vercel frontend URL)*
 
@@ -99,7 +99,7 @@ After deployment:
 
 1. **Check health endpoint:**
    ```bash
-   curl https://velocify-api.azurewebsites.net/health
+   curl https://velocify.azurewebsites.net/health
    ```
 
 2. **Test AI features:**

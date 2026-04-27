@@ -169,7 +169,7 @@ All 6 environment variables must be configured in Azure App Service Configuratio
 
 4. **JWT_AUDIENCE**
    - Your frontend URL
-   - Example: `https://velocify.vercel.app`
+   - Example: `https://veelocify.vercel.app`
 
 5. **LANGCHAIN_API_KEY**
    - OpenAI API key (format: `sk-proj-...`)
@@ -177,7 +177,7 @@ All 6 environment variables must be configured in Azure App Service Configuratio
 
 6. **CORS_ALLOWED_ORIGINS**
    - Semicolon-separated list
-   - Example: `https://velocify.vercel.app;https://velocify-staging.vercel.app`
+   - Example: `https://veelocify.vercel.app;https://velocify-staging.vercel.app`
 
 ### Azure App Service Settings
 

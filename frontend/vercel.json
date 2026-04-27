@@ -19,9 +19,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "VITE_API_BASE_URL": "@api_base_url",
-    "VITE_SIGNALR_HUB_URL": "@signalr_hub_url"
-  }
+  ]
 }

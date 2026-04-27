@@ -180,7 +180,7 @@ Open these URLs in your browser:
    ```
    JwtSettings__SecretKey = your-secret-key-here
    JwtSettings__Issuer = https://velocify.azurewebsites.net
-   JwtSettings__Audience = https://velocify.vercel.app
+   JwtSettings__Audience = https://veelocify.vercel.app
    ```
 2. Ensure secret key is at least 32 characters
 3. Restart the App Service
@@ -192,7 +192,7 @@ Open these URLs in your browser:
 **Solution:**
 1. Check Application Settings (use double underscores `__`):
    ```
-   CorsSettings__AllowedOrigins = https://velocify.vercel.app,http://localhost:3000,http://localhost:5173
+   CorsSettings__AllowedOrigins = https://veelocify.vercel.app,http://localhost:3000,http://localhost:5173
    ```
 2. Separate multiple origins with commas (no spaces)
 3. Restart the App Service

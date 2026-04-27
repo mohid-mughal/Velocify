@@ -11,9 +11,9 @@ Configure these in: **Azure Portal → App Service → Configuration → Applica
 | `AZURE_SQL_CONNECTION_STRING` | ✅ Yes | `Server=tcp:velocify-sql.database.windows.net,1433;Initial Catalog=VelocifyDb;User ID=admin;Password=Pass123!;MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;` | **CRITICAL:** Must include `Min Pool Size=2;Max Pool Size=100;` for F1 tier CPU time optimization |
 | `JWT_SECRET_KEY` | ✅ Yes | `3K8vN2pQ9mR5sT7wX0yZ1aB4cD6eF8gH9iJ0kL2mN4oP6qR8sT0uV2wX4yZ6aB8c` | Generate with `openssl rand -base64 32` |
 | `JWT_ISSUER` | ✅ Yes | `https://velocify.azurewebsites.net` | Your backend API URL |
-| `JWT_AUDIENCE` | ✅ Yes | `https://velocify.vercel.app` | Your frontend URL |
+| `JWT_AUDIENCE` | ✅ Yes | `https://veelocify.vercel.app` | Your frontend URL |
 | `LANGCHAIN_API_KEY` | ✅ Yes | `gsk-abc123...` | Groq API key from https://console.groq.com/keys |
-| `CORS_ALLOWED_ORIGINS` | ✅ Yes | `https://velocify.vercel.app;https://velocify-staging.vercel.app` | Semicolon-separated list of frontend URLs |
+| `CORS_ALLOWED_ORIGINS` | ✅ Yes | `https://veelocify.vercel.app;https://velocify-staging.vercel.app` | Semicolon-separated list of frontend URLs |
 | `ASPNETCORE_ENVIRONMENT` | ⚠️ Auto | `Production` | Automatically set by Azure, do not override |
 
 ## Connection String Configuration
