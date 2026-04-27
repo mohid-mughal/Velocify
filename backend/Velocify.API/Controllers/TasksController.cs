@@ -162,7 +162,7 @@ public class TasksController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
-        var command = new DeleteTaskCommand { Id = id };
+        var command = new DeleteTaskCommand { Id = id, DeletedByUserId = GetCurrentUserId() };
         await _mediator.Send(command);
         return NoContent();
     }
@@ -231,6 +231,7 @@ public class TasksController : ApiController
     public async Task<ActionResult<CommentDto>> CreateComment(Guid id, [FromBody] CreateCommentCommand command)
     {
         command.TaskItemId = id;
+        command.UserId = GetCurrentUserId();
         var result = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetComments), new { id }, result);
     }
@@ -253,7 +254,7 @@ public class TasksController : ApiController
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
     {
-        var command = new DeleteCommentCommand { Id = commentId };
+        var command = new DeleteCommentCommand { Id = commentId, UserId = GetCurrentUserId() };
         await _mediator.Send(command);
         return NoContent();
     }
