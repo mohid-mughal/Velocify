@@ -263,7 +263,9 @@ try
             var context = scope.ServiceProvider.GetRequiredService<Velocify.Infrastructure.Data.VelocifyDbContext>();
             
             // Skip migrations for InMemory database (used in tests)
-            if (!context.Database.IsInMemory())
+            var isInMemory = context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            
+            if (!isInMemory)
             {
                 var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
                 
