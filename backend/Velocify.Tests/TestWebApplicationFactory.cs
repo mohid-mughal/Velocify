@@ -15,12 +15,17 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // Force Test environment - must be set before configuration is built
+        builder.UseEnvironment("Test");
+        
         // IMPORTANT: We need to OVERRIDE appsettings.json which contains placeholder values like "${CORS_ALLOWED_ORIGINS}"
         // By adding our configuration LAST, it takes precedence over appsettings.json
         builder.ConfigureAppConfiguration((context, config) =>
         {
-            // Read CORS_ALLOWED_ORIGINS from environment variable if available
-            var corsOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS") 
+            // Read from environment variable using ASP.NET Core naming convention
+            // CorsSettings__AllowedOrigins maps to CorsSettings:AllowedOrigins
+            var corsOrigins = Environment.GetEnvironmentVariable("CorsSettings__AllowedOrigins")
+                ?? Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS") 
                 ?? "http://localhost:3000,http://localhost:5173";
             
             // Add test-specific configuration with HIGHEST priority
@@ -35,8 +40,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
                 ["JwtSettings:AccessTokenExpiryMinutes"] = "60",
                 ["JwtSettings:RefreshTokenExpiryDays"] = "7",
                 ["OpenAI:ApiKey"] = "test-api-key",
-                ["OpenAI:Model"] = "gpt-4",
-                ["ASPNETCORE_ENVIRONMENT"] = "Test"
+                ["OpenAI:Model"] = "gpt-4"
             });
         });
 

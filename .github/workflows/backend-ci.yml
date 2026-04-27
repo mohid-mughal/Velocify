@@ -58,7 +58,9 @@ jobs:
     
     - name: Run tests with coverage
       env:
-        CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173"
+        # Use ASP.NET Core configuration naming convention (double underscore maps to nested config)
+        # This maps to CorsSettings:AllowedOrigins in appsettings.json
+        CorsSettings__AllowedOrigins: "http://localhost:3000,http://localhost:5173"
       run: |
         dotnet test backend/Velocify.Tests/Velocify.Tests.csproj \
           --configuration Release \
