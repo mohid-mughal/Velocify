@@ -80,13 +80,15 @@ public class CorrelationIdMiddlewareTests
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
             .Returns(async (HttpContext ctx) =>
             {
-                // Write to response body and flush to trigger OnStarting callbacks
+                // Write to response body to trigger OnStarting callbacks
                 await ctx.Response.WriteAsync("test");
-                await ctx.Response.Body.FlushAsync();
             });
 
         // Act
         await middleware.InvokeAsync(context);
+        
+        // Manually trigger OnStarting callbacks by starting the response
+        await context.Response.StartAsync();
 
         // Assert
         // REQUIREMENT 16.3: Verify correlation ID is included in response header
@@ -150,13 +152,15 @@ public class CorrelationIdMiddlewareTests
         _mockNext.Setup(next => next(It.IsAny<HttpContext>()))
             .Returns(async (HttpContext ctx) =>
             {
-                // Write to response body and flush to trigger OnStarting callbacks
+                // Write to response body
                 await ctx.Response.WriteAsync("test");
-                await ctx.Response.Body.FlushAsync();
             });
 
         // Act
         await middleware.InvokeAsync(context);
+        
+        // Manually trigger OnStarting callbacks by starting the response
+        await context.Response.StartAsync();
 
         // Assert
         // Verify the existing response header was not overwritten

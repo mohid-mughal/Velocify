@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Velocify.Infrastructure.Data;
 
 namespace Velocify.Tests;
@@ -35,11 +34,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
-            // Remove the existing DbContext registration
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<VelocifyDbContext>));
+            // Remove all DbContext-related registrations
+            var descriptorsToRemove = services
+                .Where(d => d.ServiceType == typeof(DbContextOptions<VelocifyDbContext>) ||
+                           d.ServiceType == typeof(DbContextOptions) ||
+                           d.ServiceType == typeof(VelocifyDbContext))
+                .ToList();
             
-            if (descriptor != null)
+            foreach (var descriptor in descriptorsToRemove)
             {
                 services.Remove(descriptor);
             }
