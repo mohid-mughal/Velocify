@@ -306,7 +306,7 @@ export const csvImportSchema = z.object({
     .instanceof(File)
     .refine((file) => file.size <= UI_CONFIG.MAX_FILE_SIZE, 'File size must be less than 5MB')
     .refine(
-      (file) => file.name.endsWith('.csv'),
+      (file) => file.name.toLowerCase().endsWith('.csv'),
       'File must be a CSV file'
     ),
 });
@@ -404,7 +404,7 @@ export function isValidFileSize(file: File, maxSize: number = UI_CONFIG.MAX_FILE
  * @param allowedTypes - Array of allowed file extensions
  * @returns True if file type is valid
  */
-export function isValidFileType(file: File, allowedTypes: string[] = UI_CONFIG.ALLOWED_FILE_TYPES): boolean {
+export function isValidFileType(file: File, allowedTypes: readonly string[] = UI_CONFIG.ALLOWED_FILE_TYPES): boolean {
   return allowedTypes.some(type => file.name.toLowerCase().endsWith(type));
 }
 

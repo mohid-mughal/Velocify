@@ -48,7 +48,7 @@ https://velocify.azurewebsites.net
 
 ### 4. JWT_AUDIENCE
 ```
-https://veelocify.vercel.app
+https://velocify-work.vercel.app
 ```
 *(Replace with your actual Vercel frontend URL)*
 
@@ -60,7 +60,7 @@ gsk_YOUR_GROQ_API_KEY_HERE
 
 ### 6. CORS_ALLOWED_ORIGINS
 ```
-https://veelocify.vercel.app
+https://velocify-work.vercel.app
 ```
 *(Replace with your actual Vercel frontend URL)*
 

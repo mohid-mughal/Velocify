@@ -95,7 +95,7 @@ VITE_DEBUG=false
 
 1. Click "Deploy"
 2. Vercel will build and deploy your application
-3. Once deployed, you'll receive a production URL (e.g., `https://veelocify.vercel.app`)
+3. Once deployed, you'll receive a production URL (e.g., `https://velocify-work.vercel.app`)
 
 ## Post-Deployment Verification
 
@@ -118,7 +118,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-            "https://veelocify.vercel.app",  // Your Vercel production URL
+            "https://velocify-work.vercel.app",  // Your Vercel production URL
             "https://*.vercel.app"           // Preview deployments
         )
         .AllowAnyMethod()

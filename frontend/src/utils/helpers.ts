@@ -465,7 +465,7 @@ export function downloadFile(data: string | Blob, filename: string, mimeType: st
  * @returns Array of enum values
  */
 export function getEnumValues<T extends Record<string, string>>(enumObj: T): T[keyof T][] {
-  return Object.values(enumObj);
+  return Object.values(enumObj) as T[keyof T][];
 }
 
 /**

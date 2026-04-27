@@ -12,11 +12,11 @@
  * - SignalR real-time connection
  */
 
-import { Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { routes } from './routes';
-import { PrivateRoute } from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './hooks/useAuth';
 import { useSignalR } from './hooks/useSignalR';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -56,8 +56,6 @@ function RouteLoadingFallback() {
  * - 28.5: Toast notifications
  */
 function App() {
-  const { isAuthenticated } = useAuth();
-
   // Establish SignalR connection for authenticated users
   // Requirement 6.7, 25.6: Real-time notifications via SignalR
   useSignalR();
@@ -85,7 +83,7 @@ function App() {
                   key={index}
                   path={route.path}
                   element={
-                    <PrivateRoute requiredRoles={route.roles}>
+                    <PrivateRoute route={route}>
                       {route.element}
                     </PrivateRoute>
                   }

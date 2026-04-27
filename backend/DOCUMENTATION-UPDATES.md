@@ -8,7 +8,7 @@ This document summarizes all documentation updates made to reflect your actual A
 
 **App Service Name:** `velocify`  
 **URL:** `https://velocify.azurewebsites.net`  
-**Frontend:** `https://veelocify.vercel.app`
+**Frontend:** `https://velocify-work.vercel.app`
 
 ### Environment Variables (Azure Format)
 ```
@@ -38,7 +38,7 @@ LangChain__Model
 - Complete rewrite to show Azure double underscore (`__`) format
 - Added side-by-side comparison of Azure vs Local formats
 - Added Groq configuration examples
-- Updated with your actual values (velocify.azurewebsites.net, veelocify.vercel.app)
+- Updated with your actual values (velocify.azurewebsites.net, velocify-work.vercel.app)
 - Added LangChain__Model configuration
 
 **Why:** Original doc didn't explain Azure naming convention clearly
@@ -128,7 +128,7 @@ LangChain__ApiKey
 
 **After:**
 - Specific URLs: `velocify.azurewebsites.net`
-- Your frontend: `veelocify.vercel.app`
+- Your frontend: `velocify-work.vercel.app`
 
 ## What You Need to Do
 
@@ -195,7 +195,7 @@ Your deployment is **95% successful**. All core functionality works:
 
 All documentation now reflects your actual configuration with:
 - Correct environment variable names (`JwtSettings__*`, `LangChain__*`)
-- Your actual URLs (`velocify.azurewebsites.net`, `veelocify.vercel.app`)
+- Your actual URLs (`velocify.azurewebsites.net`, `velocify-work.vercel.app`)
 - Groq API support
 - Azure double underscore (`__`) format explained
 - Practical examples based on your test results

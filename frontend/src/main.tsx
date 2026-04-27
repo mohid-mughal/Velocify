@@ -51,7 +51,6 @@ root.render(
       {/* React Query Devtools - only visible in development */}
       <ReactQueryDevtools 
         initialIsOpen={false}
-        position="bottom-right"
       />
     </QueryClientProvider>
   </StrictMode>

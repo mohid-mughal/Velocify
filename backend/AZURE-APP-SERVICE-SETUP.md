@@ -148,7 +148,7 @@ https://velocify.azurewebsites.net
 
 **Example:**
 ```
-https://veelocify.vercel.app
+https://velocify-work.vercel.app
 ```
 
 #### 5. LangChain/Groq API Key
@@ -178,7 +178,7 @@ gsk-abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
 
 **Example:**
 ```
-https://veelocify.vercel.app;https://velocify-staging.vercel.app
+https://velocify-work.vercel.app;https://velocify-staging.vercel.app
 ```
 
 **Notes:**
@@ -197,9 +197,9 @@ az webapp config appsettings set \
     AZURE_SQL_CONNECTION_STRING="Server=tcp:velocify-sql.database.windows.net,1433;Initial Catalog=VelocifyDb;User ID=velocifyadmin;Password=YourPassword123!;MultipleActiveResultSets=True;Encrypt=True;Min Pool Size=2;Max Pool Size=100;" \
     JWT_SECRET_KEY="your-generated-secret-key" \
     JWT_ISSUER="https://velocify.azurewebsites.net" \
-    JWT_AUDIENCE="https://veelocify.vercel.app" \
+    JWT_AUDIENCE="https://velocify-work.vercel.app" \
     LANGCHAIN_API_KEY="gsk-your-api-key" \
-    CORS_ALLOWED_ORIGINS="https://veelocify.vercel.app"
+    CORS_ALLOWED_ORIGINS="https://velocify-work.vercel.app"
 ```
 
 ## Step 3: Configure GitHub Actions Deployment
