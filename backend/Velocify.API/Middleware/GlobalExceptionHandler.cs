@@ -124,6 +124,18 @@ public class GlobalExceptionHandler : IExceptionHandler
             // Domain exception: ConflictException - 409 Conflict (concurrency conflicts)
             ConflictException conflictException => CreateConflictProblemDetails(conflictException, correlationId),
 
+            // InvalidOperationException for business rule violations (e.g., duplicate email) - 409 Conflict
+            InvalidOperationException invalidOperationException when 
+                invalidOperationException.Message.Contains("already in use") ||
+                invalidOperationException.Message.Contains("duplicate") => new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.8",
+                Title = "Conflict",
+                Status = StatusCodes.Status409Conflict,
+                Detail = invalidOperationException.Message,
+                Instance = correlationId
+            },
+
             // All other exceptions - 500 Internal Server Error
             // CRITICAL: Never expose stack trace or internal details to client
             _ => new ProblemDetails

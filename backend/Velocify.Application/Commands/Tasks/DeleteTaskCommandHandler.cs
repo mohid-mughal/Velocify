@@ -20,7 +20,7 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Unit>
             throw new KeyNotFoundException($"Task with ID {request.Id} not found");
         }
 
-        await _taskRepository.Delete(request.Id);
+        await _taskRepository.Delete(request.Id, request.DeletedByUserId);
         
         return Unit.Value;
     }

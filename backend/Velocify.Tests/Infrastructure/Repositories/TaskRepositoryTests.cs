@@ -253,7 +253,7 @@ public class TaskRepositoryTests : IDisposable
         var taskId = task.Id;
 
         // Act
-        await _repository.Delete(taskId);
+        await _repository.Delete(taskId, _testUser.Id);
 
         // Assert
         // Verify the record still exists in the database

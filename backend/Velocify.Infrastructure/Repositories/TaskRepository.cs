@@ -361,7 +361,7 @@ public class TaskRepository : ITaskRepository
     /// Soft deletes a task by setting IsDeleted flag.
     /// Records audit log entry for deletion.
     /// </summary>
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, Guid deletedByUserId)
     {
         var task = await _context.TaskItems.FirstOrDefaultAsync(t => t.Id == id);
 
@@ -378,7 +378,7 @@ public class TaskRepository : ITaskRepository
         var auditLog = new TaskAuditLog
         {
             TaskItemId = task.Id,
-            ChangedByUserId = Guid.Empty, // Will be set by the handler
+            ChangedByUserId = deletedByUserId,
             FieldName = "IsDeleted",
             OldValue = "false",
             NewValue = "true",

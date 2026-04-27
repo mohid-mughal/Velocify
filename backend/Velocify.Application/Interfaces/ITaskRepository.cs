@@ -20,7 +20,7 @@ public interface ITaskRepository
         int pageSize = 20);
     Task<TaskDto> Create(TaskDto taskDto, Guid createdByUserId);
     Task<TaskDto> Update(TaskDto taskDto, Guid updatedByUserId);
-    Task Delete(Guid id);
+    Task Delete(Guid id, Guid deletedByUserId);
     Task<List<TaskDto>> GetSubtasks(Guid parentTaskId);
     Task<List<CommentDto>> GetComments(Guid taskId);
     Task<CommentDto?> GetCommentById(Guid commentId);

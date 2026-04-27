@@ -190,13 +190,25 @@ Authorization: Bearer {{accessToken}}
 # 5. DASHBOARD & ANALYTICS
 ###############################################
 
-### Test 5.1: Get Dashboard Statistics
-GET {{baseUrl}}/api/v1/dashboard/statistics
+### Test 5.1: Get Dashboard Summary (was: statistics)
+# Correct endpoint: /api/v1/dashboard/summary
+GET {{baseUrl}}/api/v1/dashboard/summary
 Authorization: Bearer {{accessToken}}
 Accept: application/json
 
-### Test 5.2: Get Task Distribution
-GET {{baseUrl}}/api/v1/dashboard/task-distribution
+### Test 5.2: Get Dashboard Velocity (was: task-distribution)
+# Correct endpoint: /api/v1/dashboard/velocity
+GET {{baseUrl}}/api/v1/dashboard/velocity?days=30
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 5.3: Get Workload Distribution (Admin only)
+GET {{baseUrl}}/api/v1/dashboard/workload
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Test 5.4: Get Overdue Tasks
+GET {{baseUrl}}/api/v1/dashboard/overdue
 Authorization: Bearer {{accessToken}}
 Accept: application/json
 
@@ -210,11 +222,15 @@ Authorization: Bearer {{accessToken}}
 Accept: application/json
 
 ### Test 6.2: Mark Notification as Read
-PATCH {{baseUrl}}/api/v1/notifications/{notificationId}/read
+# IMPORTANT: Replace YOUR_NOTIFICATION_ID_HERE with an actual notification ID from Test 6.1
+@notificationId = YOUR_NOTIFICATION_ID_HERE
+
+PATCH {{baseUrl}}/api/v1/notifications/{{notificationId}}/read
 Authorization: Bearer {{accessToken}}
 
 ### Test 6.3: Mark All Notifications as Read
-POST {{baseUrl}}/api/v1/notifications/mark-all-read
+# Correct endpoint: /api/v1/notifications/read-all (not mark-all-read)
+PATCH {{baseUrl}}/api/v1/notifications/read-all
 Authorization: Bearer {{accessToken}}
 
 ###############################################
@@ -227,6 +243,8 @@ Authorization: Bearer {{accessToken}}
 Accept: application/json
 
 ### Test 7.2: Update User Profile
+# NOTE: Use a unique email to avoid duplicate email constraint violation
+# Change the email if you've already used testuser@example.com
 PUT {{baseUrl}}/api/v1/users/me
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
@@ -234,7 +252,7 @@ Content-Type: application/json
 {
   "firstName": "Updated",
   "lastName": "Name",
-  "email": "testuser@example.com"
+  "email": "testuserupdated@example.com"
 }
 
 ###############################################
