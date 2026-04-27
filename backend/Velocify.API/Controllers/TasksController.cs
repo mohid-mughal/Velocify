@@ -114,6 +114,7 @@ public class TasksController : ApiController
     public async Task<ActionResult<TaskDto>> UpdateTask(Guid id, [FromBody] UpdateTaskCommand command)
     {
         command.Id = id;
+        command.UpdatedByUserId = GetCurrentUserId();
         var result = await _mediator.Send(command);
         return Ok(result);
     }
@@ -139,6 +140,7 @@ public class TasksController : ApiController
     public async Task<ActionResult<TaskDto>> UpdateTaskStatus(Guid id, [FromBody] UpdateTaskStatusCommand command)
     {
         command.Id = id;
+        command.UpdatedByUserId = GetCurrentUserId();
         var result = await _mediator.Send(command);
         return Ok(result);
     }

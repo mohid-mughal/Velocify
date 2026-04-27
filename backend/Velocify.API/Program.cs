@@ -44,7 +44,12 @@ try
             restrictedToMinimumLevel: LogEventLevel.Information));
 
     // Add services to the container.
-    builder.Services.AddControllers();
+    // Configure JSON serialization to accept string enum values (e.g., "High" instead of 1)
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        });
     builder.Services.AddInfrastructure(builder.Configuration);
 
     // JWT AUTHENTICATION CONFIGURATION
