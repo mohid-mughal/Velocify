@@ -18,10 +18,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((context, config) =>
         {
             // Add test-specific configuration
+            // Read CORS_ALLOWED_ORIGINS from environment variable if available
+            var corsOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS") 
+                ?? "http://localhost:3000";
+            
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:DefaultConnection"] = "InMemory",
-                ["CorsSettings:AllowedOrigins"] = "http://localhost:3000",
+                ["CorsSettings:AllowedOrigins"] = corsOrigins,
                 ["JwtSettings:SecretKey"] = "test-secret-key-for-integration-tests-minimum-32-characters",
                 ["JwtSettings:Issuer"] = "test-issuer",
                 ["JwtSettings:Audience"] = "test-audience",
