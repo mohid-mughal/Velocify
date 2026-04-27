@@ -101,7 +101,6 @@ export default function LoginPage() {
           <div className="space-y-4">
             {/* Email Field */}
             <FormField
-              name="email"
               label="Email address"
               type="email"
               autoComplete="email"
@@ -112,7 +111,6 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <FormField
-              name="password"
               label="Password"
               type="password"
               autoComplete="current-password"

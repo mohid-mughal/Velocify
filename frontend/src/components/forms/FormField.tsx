@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, InputProps } from '../ui/Input';
 
 export interface FormFieldProps extends Omit<InputProps, 'error'> {
-  name: string;
+  name?: string;
   label: string;
   error?: string;
   required?: boolean;

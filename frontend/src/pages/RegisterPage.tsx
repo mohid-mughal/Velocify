@@ -122,7 +122,6 @@ export default function RegisterPage() {
           <div className="space-y-4">
             {/* First Name Field */}
             <FormField
-              name="firstName"
               label="First name"
               type="text"
               autoComplete="given-name"
@@ -133,7 +132,6 @@ export default function RegisterPage() {
 
             {/* Last Name Field */}
             <FormField
-              name="lastName"
               label="Last name"
               type="text"
               autoComplete="family-name"
@@ -144,7 +142,6 @@ export default function RegisterPage() {
 
             {/* Email Field */}
             <FormField
-              name="email"
               label="Email address"
               type="email"
               autoComplete="email"
@@ -156,7 +153,6 @@ export default function RegisterPage() {
             {/* Password Field */}
             <div>
               <FormField
-                name="password"
                 label="Password"
                 type="password"
                 autoComplete="new-password"
@@ -170,7 +166,6 @@ export default function RegisterPage() {
 
             {/* Confirm Password Field */}
             <FormField
-              name="confirmPassword"
               label="Confirm password"
               type="password"
               autoComplete="new-password"
