@@ -22,6 +22,7 @@ import { lazy } from 'react';
 // Lazy-loaded page components
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ConnectionTestPage = lazy(() => import('./pages/ConnectionTestPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const TaskListPage = lazy(() => import('./pages/TaskListPage'));
 const TaskDetailPage = lazy(() => import('./pages/TaskDetailPage'));
@@ -93,6 +94,11 @@ export const routes: AppRoute[] = [
     path: '/register',
     element: <RegisterPage />,
     // No roles specified = public route
+  },
+  {
+    path: '/test-connection',
+    element: <ConnectionTestPage />,
+    // No roles specified = public route for testing
   },
 
   // Protected routes - authentication required

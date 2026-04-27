@@ -63,6 +63,7 @@ export default function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onSubmit', // Only validate on submit, not on blur
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -229,25 +230,7 @@ export default function RegisterPage() {
           </div>
         </form>
 
-        {/* Additional Links */}
-        <div className="text-center">
-          <p className="text-sm text-neutral-600">
-            By creating an account, you agree to our{' '}
-            <a
-              href="#"
-              className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
-            >
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a
-              href="#"
-              className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
-            >
-              Privacy Policy
-            </a>
-          </p>
-        </div>
+
       </div>
     </div>
   );

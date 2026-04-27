@@ -45,6 +45,7 @@ export default function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    mode: 'onSubmit', // Only validate on submit, not on blur
     defaultValues: {
       email: '',
       password: '',
@@ -175,7 +176,7 @@ export default function LoginPage() {
         </form>
 
         {/* Additional Links */}
-        <div className="text-center">
+        <div className="text-center space-y-2">
           <p className="text-sm text-neutral-600">
             Don't have an account?{' '}
             <Link
@@ -183,6 +184,14 @@ export default function LoginPage() {
               className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
             >
               Sign up now
+            </Link>
+          </p>
+          <p className="text-xs text-neutral-500">
+            <Link
+              to="/test-connection"
+              className="font-medium text-neutral-600 hover:text-neutral-700 transition-colors"
+            >
+              Test backend connection
             </Link>
           </p>
         </div>
