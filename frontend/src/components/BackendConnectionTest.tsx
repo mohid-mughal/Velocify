@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from './ui/Button';
+import axios from 'axios';
 import axiosInstance from '../api/axios';
 
 /**
@@ -30,8 +31,14 @@ export function BackendConnectionTest() {
     });
 
     try {
-      // Test the health endpoint
-      const response = await axiosInstance.get('/health');
+      // 1. Get the raw base URL, stripping any trailing slash
+      const rawBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') || '';
+      
+      // 2. Ensure we hit /health directly, bypassing the /api/v1 axiosInstance
+      const targetUrl = rawBaseUrl ? `${rawBaseUrl}/health` : '/health';
+
+      // 3. Use raw axios instead of axiosInstance
+      const response = await axios.get(targetUrl);
       
       setConnectionStatus({
         status: 'success',
