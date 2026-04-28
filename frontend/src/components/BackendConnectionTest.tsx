@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from './ui/Button';
 import axios from 'axios';
-import axiosInstance from '../api/axios';
+
 
 /**
  * Backend Connection Test Component
