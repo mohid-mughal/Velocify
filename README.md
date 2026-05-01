@@ -12,22 +12,22 @@ An AI-augmented task management platform built with ASP.NET Core 8, React 18, an
 
 ## Features
 
-- 🔐 JWT authentication with refresh token rotation
-- 👥 Role-based access control (SuperAdmin, Admin, Member)
-- ✅ Task management with filtering, search, and hierarchical subtasks
-- 💬 Real-time comments with sentiment analysis
-- 📊 Dashboard analytics with velocity tracking
-- 🤖 AI-powered features:
+-  JWT authentication with refresh token rotation
+-  Role-based access control (SuperAdmin, Admin, Member)
+-  Task management with filtering, search, and hierarchical subtasks
+-  Real-time comments with sentiment analysis
+-  Dashboard analytics with velocity tracking
+-  AI-powered features:
   - Natural language task creation
   - Smart task decomposition
   - Daily digest generation
   - Workload balancing suggestions
   - Semantic search
   - CSV import normalization
-- 🔔 Real-time notifications via SignalR
-- 📈 Structured logging with Serilog
-- 🏥 Health checks for monitoring
-- 🚀 Optimized database queries with compiled queries and indexed views
+-  Real-time notifications via SignalR
+-  Structured logging with Serilog
+-  Health checks for monitoring
+-  Optimized database queries with compiled queries and indexed views
 
 ## Prerequisites
 
