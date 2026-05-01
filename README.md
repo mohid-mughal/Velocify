@@ -191,13 +191,21 @@ velocify-platform/
 │   └── Velocify.Tests/            # Unit and integration tests
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                   # API client and axios configuration
-│   │   ├── components/            # Reusable UI components
-│   │   ├── features/              # Feature-specific components and logic
+│   │   ├── api/                   # API client with React Query integration
+│   │   ├── components/            # Feature-organized reusable components
+│   │   │   ├── admin/             # Admin panel components
+│   │   │   ├── ai/                # AI feature components
+│   │   │   ├── dashboard/         # Dashboard widgets and charts
+│   │   │   ├── forms/             # Form components with validation
+│   │   │   ├── layout/            # Layout components (Header, Sidebar, Footer)
+│   │   │   ├── notifications/     # Notification components
+│   │   │   ├── tasks/             # Task management components
+│   │   │   └── ui/                # Shared UI primitives
 │   │   ├── hooks/                 # Custom React hooks
-│   │   ├── pages/                 # Page components
-│   │   ├── store/                 # Zustand stores
-│   │   └── utils/                 # Utility functions
+│   │   ├── pages/                 # Route-level page components
+│   │   ├── routes/                # Route configuration and protection
+│   │   ├── store/                 # Zustand state management
+│   │   └── utils/                 # Helper functions and utilities
 │   └── public/                    # Static assets
 ├── infrastructure/
 │   ├── azure-sql-setup.sql        # Database bootstrap script
@@ -258,6 +266,30 @@ Once the backend is running, access the Swagger UI at:
 ## License
 
 This project is licensed under the MIT License.
+
+## Documentation
+
+For detailed lessons learned and implementation insights:
+- Frontend implementation details and patterns: `Lessons_learnt_in_frontend.md`
+- Backend architecture and optimization strategies: `Lessons_learnt_in_backend.md`
+
+### Backend Implementation Details
+
+I built the backend using Clean Architecture with four distinct layers. I implemented CQRS pattern with MediatR for command and query separation. I configured Azure SQL Database with optimized connection pooling for the F1 tier.
+
+I created comprehensive API endpoints following REST principles with proper validation using FluentValidation. I implemented JWT authentication with refresh token rotation and role-based authorization. I integrated LangChain for AI features including natural language task creation and semantic search.
+
+I optimized database performance using compiled queries, indexed views, and table partitioning for audit logs. I configured Serilog for structured logging with 7-day retention. I implemented health checks for database, LangChain API, and disk space monitoring.
+
+I deployed to Azure App Service F1 tier with automated GitHub Actions workflow. I fixed critical issues including user ID extraction from JWT tokens, enum serialization configuration, and task status update audit logging. I configured CORS properly for frontend integration and implemented comprehensive error handling with global exception middleware.
+
+### Infrastructure Configuration
+
+I configured Azure App Service with proper environment variables using double underscore notation for nested keys. I set up Azure SQL Database with firewall rules allowing Azure services. I configured connection pooling with Min Pool Size 2 and Max Pool Size 100 for F1 tier optimization.
+
+I implemented automated deployment through GitHub Actions with build, test, and migration steps. I configured health checks to minimize cold starts on the F1 tier. I set up monitoring alerts for CPU time usage, memory consumption, and disk space.
+
+I documented all environment variables including database connection strings, JWT settings, LangChain API keys, and CORS origins. I created deployment checklists and verification guides for production deployments. I optimized for F1 tier limitations including 60-minute daily CPU quota and 1GB RAM constraint.
 
 ## Support
 

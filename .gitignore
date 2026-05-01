@@ -57,12 +57,16 @@ logs/
 # Kiro specs (internal documentation)
 .kiro/
 
-# Task completion and implementation summaries
-*TASK_*.md
-*_IMPLEMENTATION_SUMMARY.md
-*_COMPLETION.md
-*CONFIGURATION-SUMMARY.md
+# Markdown files (except main documentation)
+*.md
+!README.md
+!Lessons_learnt_in_frontend.md
+!Lessons_learnt_in_backend.md
 
-# Local deployment checklists with credentials
-*.local.md
-DEPLOYMENT-CHECKLIST.local.md
+# Backend documentation files
+backend/**/*.md
+!backend/README.md
+
+# Infrastructure documentation files
+infrastructure/**/*.md
+!infrastructure/README.md

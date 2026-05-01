@@ -104,24 +104,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
-    
-    - name: Install dependencies
-      working-directory: frontend
-      run: npm ci
-    
-    - name: Build for production
-      working-directory: frontend
-      run: npm run build
-      env:
-        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-        VITE_SIGNALR_HUB_URL: ${{ secrets.VITE_SIGNALR_HUB_URL }}
-    
+
     - name: Deploy to Vercel
       id: deploy
       uses: amondnet/vercel-action@v25
