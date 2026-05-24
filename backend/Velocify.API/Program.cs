@@ -245,7 +245,7 @@ try
 
     var app = builder.Build();
 
-    // DATABASE MIGRATION ON STARTUP
+    // DATABASE MIGRATION AND SEEDING ON STARTUP
     // 
     // Requirement 29.4: Run pending EF Core migrations automatically on startup
     // This ensures the database schema is always up-to-date without manual intervention.
@@ -255,6 +255,7 @@ try
     // - Creates a scope to resolve the DbContext
     // - Checks for pending migrations using GetPendingMigrationsAsync()
     // - Applies migrations if any are pending using MigrateAsync()
+    // - Seeds initial admin user if no users exist
     // - Logs migration status for observability
     // - Handles errors gracefully with detailed logging
     // 
@@ -289,6 +290,11 @@ try
                 {
                     Log.Information("Database is up-to-date, no pending migrations");
                 }
+
+                // Seed initial admin user if no users exist
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Velocify.Infrastructure.Data.DbSeeder>>();
+                var seeder = new Velocify.Infrastructure.Data.DbSeeder(context, logger);
+                await seeder.SeedAsync();
             }
             else
             {
@@ -297,7 +303,7 @@ try
         }
         catch (Exception ex)
         {
-            Log.Fatal(ex, "An error occurred while applying database migrations");
+            Log.Fatal(ex, "An error occurred while applying database migrations or seeding data");
             throw; // Fail fast - don't start the application if migrations fail
         }
     }

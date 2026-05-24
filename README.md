@@ -86,6 +86,21 @@ An AI-augmented task management platform built with ASP.NET Core 8, React 18, an
    dotnet run --project Velocify.API/Velocify.API.csproj
    ```
 
+   **Default User Credentials**: The application automatically creates demo users and sample tasks on first run:
+   
+   **Admin User (SuperAdmin)**:
+   - **Email**: `admin@velocify.com`
+   - **Password**: `Admin@123`
+   - **Role**: SuperAdmin (full system access)
+   
+   **Demo Member Users**:
+   - **Email**: `john.doe@velocify.com` | **Password**: `Member@123` | **Role**: Member
+   - **Email**: `jane.smith@velocify.com` | **Password**: `Member@123` | **Role**: Member
+   
+   The seeder also creates 8 sample tasks across different statuses (Pending, In Progress, Completed, Blocked, Overdue) to demonstrate the dashboard and task management features.
+   
+   ⚠️ **SECURITY WARNING**: Change these default passwords immediately after first login in production!
+
 7. Access Swagger UI at `https://localhost:5000/swagger`
 
 ### Frontend Setup
