@@ -17,8 +17,11 @@ import { useDashboardSummary, useVelocity, useWorkload, useOverdue } from '../ho
 import { useUserRole } from '../store/authStore';
 import { StatCard, VelocityChart, PriorityChart, WorkloadChart, DigestCard, OverdueAlert } from '../components/dashboard';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/Button';
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const userRole = useUserRole();
   const isAdmin = userRole === 'Admin' || userRole === 'SuperAdmin';
 
@@ -49,68 +52,76 @@ export default function DashboardPage() {
   })) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600 mt-2">Overview of your tasks and productivity</p>
         </div>
-
-        {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Pending"
-            count={summary?.pendingCount || 0}
-            color="bg-blue-500"
-            icon="📋"
-            loading={summaryLoading}
-          />
-          <StatCard
-            title="In Progress"
-            count={summary?.inProgressCount || 0}
-            color="bg-purple-500"
-            icon="⚡"
-            loading={summaryLoading}
-          />
-          <StatCard
-            title="Completed"
-            count={summary?.completedCount || 0}
-            color="bg-green-500"
-            icon="✓"
-            loading={summaryLoading}
-          />
-          <StatCard
-            title="Blocked"
-            count={summary?.blockedCount || 0}
-            color="bg-red-500"
-            icon="⚠"
-            loading={summaryLoading}
-          />
+        <div className="flex gap-3">
+          <Button variant="secondary" onClick={() => navigate('/tasks')}>
+            View All Tasks
+          </Button>
+          <Button onClick={() => navigate('/tasks/new')}>
+            + New Task
+          </Button>
         </div>
+      </div>
 
-        {/* Overdue Tasks Alert */}
-        <OverdueAlert tasks={overdueTasks || []} loading={overdueLoading} />
-
-        {/* AI Digest Card */}
-        <DigestCard
-          dueTodayCount={summary?.dueTodayCount || 0}
-          overdueCount={summary?.overdueCount || 0}
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard
+          title="Pending"
+          count={summary?.pendingCount || 0}
+          color="bg-blue-500"
+          icon="📋"
           loading={summaryLoading}
         />
-
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Velocity Line Chart */}
-          <VelocityChart data={velocityChartData} loading={velocityLoading} />
-
-          {/* Priority Bar Chart */}
-          <PriorityChart data={priorityData} loading={overdueLoading} />
-        </div>
-
-        {/* Admin-only Workload Distribution Chart */}
-        {isAdmin && <WorkloadChart data={workloadChartData} loading={workloadLoading} />}
+        <StatCard
+          title="In Progress"
+          count={summary?.inProgressCount || 0}
+          color="bg-purple-500"
+          icon="⚡"
+          loading={summaryLoading}
+        />
+        <StatCard
+          title="Completed"
+          count={summary?.completedCount || 0}
+          color="bg-green-500"
+          icon="✓"
+          loading={summaryLoading}
+        />
+        <StatCard
+          title="Blocked"
+          count={summary?.blockedCount || 0}
+          color="bg-red-500"
+          icon="⚠"
+          loading={summaryLoading}
+        />
       </div>
+
+      {/* Overdue Tasks Alert */}
+      <OverdueAlert tasks={overdueTasks || []} loading={overdueLoading} />
+
+      {/* AI Digest Card */}
+      <DigestCard
+        dueTodayCount={summary?.dueTodayCount || 0}
+        overdueCount={summary?.overdueCount || 0}
+        loading={summaryLoading}
+      />
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Velocity Line Chart */}
+        <VelocityChart data={velocityChartData} loading={velocityLoading} />
+
+        {/* Priority Bar Chart */}
+        <PriorityChart data={priorityData} loading={overdueLoading} />
+      </div>
+
+      {/* Admin-only Workload Distribution Chart */}
+      {isAdmin && <WorkloadChart data={workloadChartData} loading={workloadLoading} />}
     </div>
   );
 }

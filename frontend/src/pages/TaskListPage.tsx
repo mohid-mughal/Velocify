@@ -100,92 +100,90 @@ export default function TaskListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
-            <p className="text-gray-600 mt-1">
-              {data?.totalCount || 0} task{data?.totalCount !== 1 ? 's' : ''} found
-            </p>
-          </div>
-          <Button onClick={() => navigate('/tasks/new')}>
-            + New Task
-          </Button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Tasks</h1>
+          <p className="text-gray-600 mt-1">
+            {data?.totalCount || 0} task{data?.totalCount !== 1 ? 's' : ''} found
+          </p>
         </div>
+        <Button onClick={() => navigate('/tasks/new')}>
+          + New Task
+        </Button>
+      </div>
 
-        {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          {/* Search Bar */}
-          <div className="mb-4">
-            <SearchBar
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-              useSemanticSearch={useSemanticSearch}
-              onSemanticToggle={setUseSemanticSearch}
-            />
-          </div>
-
-          {/* Filter Panel */}
-          <TaskFilters
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onClearFilters={handleClearFilters}
+      {/* Search and Filters */}
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        {/* Search Bar */}
+        <div className="mb-4">
+          <SearchBar
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            useSemanticSearch={useSemanticSearch}
+            onSemanticToggle={setUseSemanticSearch}
           />
         </div>
 
-        {/* Bulk Action Toolbar (Admin Only) */}
-        {isAdmin && (
-          <div className="mb-6">
-            <BulkActionToolbar
-              selectedCount={selectedTasks.size}
-              onChangeStatus={() => {/* TODO: Implement */}}
-              onReassign={() => {/* TODO: Implement */}}
-              onDelete={() => {/* TODO: Implement */}}
-            />
-          </div>
-        )}
-
-        {/* Task List */}
-        <TaskList
-          tasks={data?.items || []}
-          isLoading={isLoading}
-          error={error}
-          isAdmin={isAdmin}
-          selectedTasks={selectedTasks}
-          onTaskSelect={handleTaskSelect}
-          onTaskClick={handleTaskClick}
-          getDueDateColor={getDueDateColor}
+        {/* Filter Panel */}
+        <TaskFilters
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
         />
-
-        {/* Pagination */}
-        {data && data.totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4 mt-6">
-            <div className="text-sm text-neutral-600">
-              Page {data.page} of {data.totalPages}
-            </div>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={data.page === 1}
-                onClick={() => handlePageChange(data.page - 1)}
-              >
-                Previous
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={data.page === data.totalPages}
-                onClick={() => handlePageChange(data.page + 1)}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Bulk Action Toolbar (Admin Only) */}
+      {isAdmin && (
+        <div>
+          <BulkActionToolbar
+            selectedCount={selectedTasks.size}
+            onChangeStatus={() => {/* TODO: Implement */}}
+            onReassign={() => {/* TODO: Implement */}}
+            onDelete={() => {/* TODO: Implement */}}
+          />
+        </div>
+      )}
+
+      {/* Task List */}
+      <TaskList
+        tasks={data?.items || []}
+        isLoading={isLoading}
+        error={error}
+        isAdmin={isAdmin}
+        selectedTasks={selectedTasks}
+        onTaskSelect={handleTaskSelect}
+        onTaskClick={handleTaskClick}
+        getDueDateColor={getDueDateColor}
+      />
+
+      {/* Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4">
+          <div className="text-sm text-neutral-600">
+            Page {data.page} of {data.totalPages}
+          </div>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={data.page === 1}
+              onClick={() => handlePageChange(data.page - 1)}
+            >
+              Previous
+            </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={data.page === data.totalPages}
+              onClick={() => handlePageChange(data.page + 1)}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ import PrivateRoute from './components/PrivateRoute';
 import { useSignalR } from './hooks/useSignalR';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
+import { MainLayout } from './components/layout/MainLayout';
 
 /**
  * Loading fallback component for lazy-loaded routes
@@ -65,7 +66,7 @@ function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             {routes.map((route, index) => {
-              // Public routes (no roles specified)
+              // Public routes (no roles specified) - render without layout
               if (route.roles === undefined) {
                 return (
                   <Route
@@ -77,13 +78,16 @@ function App() {
               }
 
               // Protected routes (requires authentication and optional role check)
+              // Wrap with MainLayout to show Header, Sidebar, and navigation
               return (
                 <Route
                   key={index}
                   path={route.path}
                   element={
                     <PrivateRoute route={route}>
-                      {route.element as ReactElement}
+                      <MainLayout>
+                        {route.element as ReactElement}
+                      </MainLayout>
                     </PrivateRoute>
                   }
                 />
