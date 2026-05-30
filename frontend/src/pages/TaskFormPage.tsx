@@ -98,7 +98,11 @@ export default function TaskFormPage() {
         assignedToUserId: parsed.assignedToUserId || null,
         dueDate: parsed.dueDate || null,
         estimatedHours: parsed.estimatedHours || null,
-        tags: parsed.tags || [],
+        tags: Array.isArray(parsed.tags) 
+              ? parsed.tags 
+              : typeof parsed.tags === 'string' 
+                ? parsed.tags.split(',').map(t => t.trim()).filter(Boolean) 
+                : [],
       };
 
       setParsedData(formData);
