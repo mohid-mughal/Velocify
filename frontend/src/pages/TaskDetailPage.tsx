@@ -44,7 +44,7 @@ import {
 import type { TaskStatus } from '../api/types';
 
 export default function TaskDetailPage() {
-  const { taskId } = useParams<{ taskId: string }>();
+  const { id: taskId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { showSuccess, showError } = useToast();
