@@ -55,7 +55,7 @@ public class NaturalLanguageTaskServiceTests : IDisposable
 
         // Setup configuration mock with OpenAI API key
         _configurationMock = new Mock<IConfiguration>();
-        _configurationMock.Setup(x => x["OpenAI:ApiKey"])
+        _configurationMock.Setup(x => x["LangChain:ApiKey"])
             .Returns("test-api-key-12345");
 
         // Setup HTTP context accessor with authenticated user
@@ -272,7 +272,7 @@ public class NaturalLanguageTaskServiceTests : IDisposable
         // Arrange
         // Note: This test uses the real NaturalLanguageTaskService to test API key validation
         var configWithoutKey = new Mock<IConfiguration>();
-        configWithoutKey.Setup(x => x["OpenAI:ApiKey"])
+        configWithoutKey.Setup(x => x["LangChain:ApiKey"])
             .Returns((string?)null);
 
         var service = new NaturalLanguageTaskService(

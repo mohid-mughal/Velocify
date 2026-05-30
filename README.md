@@ -75,7 +75,7 @@ An AI-augmented task management platform built with ASP.NET Core 8, React 18, an
      },
      "LangChain": {
        "ApiKey": "your-openai-api-key",
-       "Model": "gpt-4",
+       "Model": "openai/gpt-oss-120b",
        "MaxTokens": 2000
      }
    }

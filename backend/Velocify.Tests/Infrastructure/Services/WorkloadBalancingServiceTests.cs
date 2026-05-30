@@ -62,7 +62,7 @@ public class WorkloadBalancingServiceTests : IDisposable
 
         // Setup configuration mock with OpenAI API key
         _configurationMock = new Mock<IConfiguration>();
-        _configurationMock.Setup(x => x["OpenAI:ApiKey"])
+        _configurationMock.Setup(x => x["LangChain:ApiKey"])
             .Returns("test-api-key-12345");
 
         // Setup HTTP context accessor with authenticated admin user

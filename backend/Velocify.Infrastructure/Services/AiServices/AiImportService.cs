@@ -233,14 +233,22 @@ public class AiImportService : IAiImportService
     /// </summary>
     private async Task<List<TaskImportRow>> NormalizeWithLangChain(List<Dictionary<string, string>> rawRows)
     {
-        // Get OpenAI API key from configuration
-        var apiKey = _configuration["OpenAI:ApiKey"] 
-            ?? throw new InvalidOperationException("OpenAI API key not configured");
+        // Get Groq API key and model from LangChain configuration
+        var apiKey = _configuration["LangChain:ApiKey"] 
+            ?? throw new InvalidOperationException("Groq API key not configured");
 
-        // Initialize OpenAI provider and chat model
-        // Using gpt-3.5-turbo for fast, cost-effective normalization
-        var provider = new OpenAiProvider(apiKey);
-        var model = new OpenAiChatModel(provider, id: "gpt-3.5-turbo");
+        // Read the model from config, fallback to the Groq-hosted OpenAI OSS model
+        var modelId = _configuration["LangChain:Model"] ?? "openai/gpt-oss-120b";
+
+        // Configure the provider to point to Groq's OpenAI-compatible endpoint
+        var config = new OpenAiConfiguration 
+        {
+            ApiKey = apiKey,
+            Endpoint = "https://api.groq.com/openai/v1"
+        };
+
+        var provider = new OpenAiProvider(config);
+        var model = new OpenAiChatModel(provider, id: modelId);
 
         // Extract sample rows for AI analysis (first 3 rows to understand the data)
         var sampleRows = rawRows.Take(3).ToList();
