@@ -244,7 +244,7 @@ public class AiImportService : IAiImportService
         var config = new OpenAiConfiguration 
         {
             ApiKey = apiKey,
-            Endpoint = "https://api.groq.com/openai/v1"
+            Endpoint = "api.groq.com/openai/v1"
         };
 
         var provider = new OpenAiProvider(config);
