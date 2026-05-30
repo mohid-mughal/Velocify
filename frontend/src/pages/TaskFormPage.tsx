@@ -11,7 +11,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { MainLayout } from '../components/layout/MainLayout';
 import { NaturalLanguageInput } from '../components/forms/NaturalLanguageInput';
 import { TaskForm } from '../components/forms/TaskForm';
 import { aiService } from '../api/ai.service';
@@ -42,10 +41,10 @@ export default function TaskFormPage() {
   const [parsedData, setParsedData] = useState<Partial<TaskFormData> | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
 
-  // Fetch users for assignee dropdown
+  // Fetch users for assignee dropdown (all authenticated users can see this)
   const { data: usersData } = useQuery({
     queryKey: queryKeys.users.list(),
-    queryFn: () => usersService.getUsers({ page: 1, pageSize: 100 }),
+    queryFn: () => usersService.getActiveUsers(),
   });
 
   // Fetch existing task for edit mode
@@ -161,31 +160,28 @@ export default function TaskFormPage() {
 
   if (isEditMode && isLoadingTask) {
     return (
-      <MainLayout>
-        <div className="max-w-4xl mx-auto py-8 px-4">
-          <div className="text-center">Loading task...</div>
-        </div>
-      </MainLayout>
+      <div className="max-w-4xl mx-auto py-8 px-4">
+        <div className="text-center">Loading task...</div>
+      </div>
     );
   }
 
-  const users = usersData?.items || [];
+  const users = usersData || [];
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <MainLayout>
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-neutral-900">
-            {isEditMode ? 'Edit Task' : 'Create New Task'}
-          </h1>
-          <p className="text-neutral-600 mt-2">
-            {isEditMode
-              ? 'Update task details below'
-              : 'Create a task using natural language or fill out the form manually'}
-          </p>
-        </div>
+    <div className="max-w-4xl mx-auto py-8 px-4">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-neutral-900">
+          {isEditMode ? 'Edit Task' : 'Create New Task'}
+        </h1>
+        <p className="text-neutral-600 mt-2">
+          {isEditMode
+            ? 'Update task details below'
+            : 'Create a task using natural language or fill out the form manually'}
+        </p>
+      </div>
 
         {/* Mode Toggle (only for create mode) */}
         {!isEditMode && (
@@ -256,7 +252,6 @@ export default function TaskFormPage() {
             </p>
           </div>
         )}
-      </div>
-    </MainLayout>
+    </div>
   );
 }

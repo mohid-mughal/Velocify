@@ -8,6 +8,7 @@ public interface IUserRepository
     Task<UserDto?> GetById(Guid id);
     Task<UserDto?> GetByEmail(string email);
     Task<PagedResult<UserDto>> GetList(int page = 1, int pageSize = 20);
+    Task<List<UserDto>> GetActiveUsers();
     Task<UserDto> Create(UserDto userDto);
     Task<UserDto> Update(UserDto userDto);
     Task Delete(Guid id);

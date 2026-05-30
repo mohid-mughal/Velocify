@@ -33,45 +33,43 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage users, workload, and system metrics</p>
-        </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <p className="text-gray-600 mt-2">Manage users, workload, and system metrics</p>
+      </div>
 
-        {/* System Metrics Cards - Requirement 27.3 */}
-        <div className="mb-8">
-          <SystemMetrics />
-        </div>
+      {/* System Metrics Cards - Requirement 27.3 */}
+      <div>
+        <SystemMetrics />
+      </div>
 
-        {/* Workload Balancing Panel - Requirement 27.3 */}
-        <div className="bg-white rounded-lg shadow mb-8">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Workload Balancing</h2>
-            <p className="text-sm text-gray-600 mt-1">AI-powered task reassignment suggestions</p>
-          </div>
-          <div className="p-6">
-            <WorkloadBalancingPanel />
-          </div>
+      {/* Workload Balancing Panel - Requirement 27.3 */}
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">Workload Balancing</h2>
+          <p className="text-sm text-gray-600 mt-1">AI-powered task reassignment suggestions</p>
         </div>
+        <div className="p-6">
+          <WorkloadBalancingPanel />
+        </div>
+      </div>
 
-        {/* User Management Table - Requirement 27.1 */}
-        <div className="bg-white rounded-lg shadow mb-8">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">User Management</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              {isSuperAdmin ? 'Manage user roles and access' : 'View team members'}
-            </p>
-          </div>
-          <UserManagementTable />
+      {/* User Management Table - Requirement 27.1 */}
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">User Management</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            {isSuperAdmin ? 'Manage user roles and access' : 'View team members'}
+          </p>
         </div>
+        <UserManagementTable />
+      </div>
 
-        {/* AI Adoption Metrics - Requirement 27.4 */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <AiAdoptionCharts />
-        </div>
+      {/* AI Adoption Metrics - Requirement 27.4 */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <AiAdoptionCharts />
       </div>
     </div>
   );

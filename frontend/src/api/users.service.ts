@@ -47,6 +47,17 @@ export async function updateCurrentUser(data: UpdateCurrentUserRequest): Promise
 }
 
 /**
+ * Get a simple list of active users for task assignment (all authenticated users).
+ * Returns only basic user information for dropdown/selection purposes.
+ * 
+ * @returns List of active UserDto
+ */
+export async function getActiveUsers(): Promise<UserDto[]> {
+  const response = await axiosInstance.get<UserDto[]>('/users/active');
+  return response.data;
+}
+
+/**
  * Get paginated list of users (Admin/SuperAdmin only)
  * 
  * Requirement 2.3: Admins can view all users
@@ -130,6 +141,7 @@ export async function getUserProductivity(id: string): Promise<ProductivityDto> 
 export const usersService = {
   getCurrentUser,
   updateCurrentUser,
+  getActiveUsers,
   getUsers,
   getUserById,
   updateUserRole,

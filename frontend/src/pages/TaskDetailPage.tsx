@@ -231,6 +231,13 @@ export default function TaskDetailPage() {
           {canEdit && (
             <div className="flex gap-2">
               <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate(`/tasks/${taskId}/edit`)}
+              >
+                ✏️ Edit Task
+              </Button>
+              <Button
                 variant="primary"
                 size="sm"
                 onClick={handleDecompose}

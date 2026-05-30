@@ -93,6 +93,23 @@ public class UsersController : ApiController
     }
 
     /// <summary>
+    /// Gets a simple list of active users for task assignment (all authenticated users).
+    /// Returns only basic user information (id, name, email) for dropdown/selection purposes.
+    /// </summary>
+    /// <returns>List of active users</returns>
+    /// <response code="200">User list successfully retrieved</response>
+    /// <response code="401">User not authenticated</response>
+    [HttpGet("active")]
+    [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<List<UserDto>>> GetActiveUsers()
+    {
+        var query = new GetActiveUsersQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Gets a specific user by ID (Admin and SuperAdmin only).
     /// Admins can only view their team members, SuperAdmins can view any user.
     /// </summary>

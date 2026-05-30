@@ -99,6 +99,23 @@ public class UserRepository : IUserRepository
     }
 
     /// <summary>
+    /// Retrieves all active users for task assignment purposes.
+    /// Returns a simple list without pagination.
+    /// Uses AsReadOnly() for optimal performance.
+    /// </summary>
+    public async Task<List<UserDto>> GetActiveUsers()
+    {
+        var users = await _context.Users
+            .Where(u => u.IsActive)
+            .OrderBy(u => u.FirstName)
+            .ThenBy(u => u.LastName)
+            .AsReadOnly()
+            .ToListAsync();
+
+        return users.Select(MapToDto).ToList();
+    }
+
+    /// <summary>
     /// Creates a new user with hashed password.
     /// Passwords are hashed using BCrypt with automatic salt generation.
     /// </summary>
