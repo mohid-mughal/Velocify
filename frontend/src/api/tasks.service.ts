@@ -67,13 +67,47 @@ export async function getTaskById(id: string): Promise<TaskDetailDto> {
  */
 export async function createTask(data: CreateTaskRequest): Promise<TaskDto> {
   // Convert tags array to comma-separated string if needed
+  // Backend expects a string, not an array
+  const tags = Array.isArray(data.tags) 
+    ? data.tags.filter(Boolean).join(',') 
+    : (data.tags || '');
+  
+  // Convert date string to ISO 8601 format if provided
+  // HTML5 date input returns "YYYY-MM-DD", backend expects "YYYY-MM-DDTHH:mm:ssZ"
+  let dueDate: string | null = null;
+  if (data.dueDate) {
+    try {
+      // Parse the date string and convert to ISO format
+      const date = new Date(data.dueDate);
+      // Check if date is valid
+      if (!isNaN(date.getTime())) {
+        dueDate = date.toISOString();
+      }
+    } catch (error) {
+      console.warn('Invalid date format:', data.dueDate);
+    }
+  }
+  
   const payload = {
-    ...data,
-    tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags,
+    title: data.title,
+    description: data.description,
+    priority: data.priority,
+    category: data.category,
+    assignedToUserId: data.assignedToUserId,
+    dueDate: dueDate,
+    estimatedHours: data.estimatedHours,
+    tags: tags,
   };
   
-  const response = await axiosInstance.post<TaskDto>('/tasks', payload);
-  return response.data;
+  console.log('Creating task with payload:', JSON.stringify(payload, null, 2));
+  
+  try {
+    const response = await axiosInstance.post<TaskDto>('/tasks', payload);
+    return response.data;
+  } catch (error: any) {
+    console.error('Task creation error:', error.response?.data || error.message);
+    throw error;
+  }
 }
 
 /**
@@ -87,7 +121,31 @@ export async function createTask(data: CreateTaskRequest): Promise<TaskDto> {
  * @returns Updated TaskDto
  */
 export async function updateTask(id: string, data: UpdateTaskRequest): Promise<TaskDto> {
-  const response = await axiosInstance.put<TaskDto>(`/tasks/${id}`, data);
+  // Convert tags array to comma-separated string if needed
+  const tags = data.tags 
+    ? (Array.isArray(data.tags) ? data.tags.filter(Boolean).join(',') : data.tags)
+    : undefined;
+  
+  // Convert date string to ISO 8601 format if provided
+  let dueDate: string | null | undefined = data.dueDate;
+  if (data.dueDate && typeof data.dueDate === 'string') {
+    try {
+      const date = new Date(data.dueDate);
+      if (!isNaN(date.getTime())) {
+        dueDate = date.toISOString();
+      }
+    } catch (error) {
+      console.warn('Invalid date format:', data.dueDate);
+    }
+  }
+  
+  const payload = {
+    ...data,
+    dueDate: dueDate,
+    tags: tags,
+  };
+  
+  const response = await axiosInstance.put<TaskDto>(`/tasks/${id}`, payload);
   return response.data;
 }
 

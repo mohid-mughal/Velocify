@@ -195,7 +195,7 @@ export interface CreateTaskRequest {
   assignedToUserId: string | null;
   dueDate: string | null;
   estimatedHours: number | null;
-  tags: string | string[]; // Backend expects string (comma-separated) or array
+  tags: string | string[]; // Frontend can send array, service converts to comma-separated string for backend
 }
 
 export interface UpdateTaskRequest {

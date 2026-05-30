@@ -75,7 +75,7 @@ public class TasksController : ApiController
     /// <summary>
     /// Creates a new task.
     /// </summary>
-    /// <param name="command">Task creation details including title, description, priority, category, assignee, and due date</param>
+    /// <param name="request">Task creation details including title, description, priority, category, assignee, and due date</param>
     /// <returns>Created task</returns>
     /// <response code="201">Task successfully created</response>
     /// <response code="400">Invalid task data or validation errors</response>
@@ -84,9 +84,22 @@ public class TasksController : ApiController
     [ProducesResponseType(typeof(TaskDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<TaskDto>> CreateTask([FromBody] CreateTaskCommand command)
+    public async Task<ActionResult<TaskDto>> CreateTask([FromBody] CreateTaskRequestDto request)
     {
-        command.CreatedByUserId = GetCurrentUserId();
+        // Map DTO to command (parentTaskId is ignored for backward compatibility)
+        var command = new CreateTaskCommand
+        {
+            Title = request.Title,
+            Description = request.Description,
+            Priority = request.Priority,
+            Category = request.Category,
+            AssignedToUserId = request.AssignedToUserId,
+            DueDate = request.DueDate,
+            EstimatedHours = request.EstimatedHours,
+            Tags = request.Tags,
+            CreatedByUserId = GetCurrentUserId()
+        };
+        
         var result = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetTaskById), new { id = result.Id }, result);
     }
