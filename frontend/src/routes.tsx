@@ -118,6 +118,11 @@ export const routes: AppRoute[] = [
     roles: [], // Empty array = requires authentication, any role
   },
   {
+    path: '/tasks/my',
+    element: <TaskListPage />,
+    roles: [],
+  },
+  {
     path: '/tasks/new',
     element: <TaskFormPage />,
     roles: [], // Empty array = requires authentication, any role

@@ -13,11 +13,11 @@
  * - Admin users see bulk action toolbar
  */
 
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTasks } from '../hooks/useTasks';
 import { useDebounce } from '../hooks/useDebounce';
-import { useUserRole } from '../store/authStore';
+import { useUserRole, useAuthStore } from '../store/authStore';
 import { Button } from '../components/ui/Button';
 import { TaskFilters, TaskList, BulkActionToolbar, SearchBar } from '../components/tasks';
 import type { TaskFilters as TaskFiltersType } from '../api/types';
@@ -25,14 +25,26 @@ import { isPast, isToday } from 'date-fns';
 
 export default function TaskListPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const userRole = useUserRole();
+  const { user } = useAuthStore();
   const isAdmin = userRole === 'Admin' || userRole === 'SuperAdmin';
 
   // Filter state
   const [filters, setFilters] = useState<TaskFiltersType>({
     page: 1,
     pageSize: 20,
+    assignedToUserId: location.pathname === '/tasks/my' ? user?.id : undefined,
   });
+
+  // Automatically update filters if the user switches between "Tasks" and "My Tasks"
+  useEffect(() => {
+    setFilters(prev => ({
+      ...prev,
+      page: 1,
+      assignedToUserId: location.pathname === '/tasks/my' ? user?.id : undefined,
+    }));
+  }, [location.pathname, user?.id]);
 
   // Search state
   const [searchTerm, setSearchTerm] = useState('');
