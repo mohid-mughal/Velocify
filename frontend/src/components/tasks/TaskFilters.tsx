@@ -23,8 +23,8 @@ export function TaskFilters({ filters, onFilterChange, onClearFilters }: TaskFil
       {/* Status Filter */}
       <Select
         label="Status"
-        value={filters.status?.[0] || ''}
-        onChange={(e) => onFilterChange('status', e.target.value ? [e.target.value as TaskStatus] : undefined)}
+        value={filters.status || ''}
+        onChange={(e) => onFilterChange('status', e.target.value ? (e.target.value as TaskStatus) : undefined)}
         options={[
           { value: '', label: 'All Statuses' },
           { value: 'Pending', label: 'Pending' },
@@ -39,8 +39,8 @@ export function TaskFilters({ filters, onFilterChange, onClearFilters }: TaskFil
       {/* Priority Filter */}
       <Select
         label="Priority"
-        value={filters.priority?.[0] || ''}
-        onChange={(e) => onFilterChange('priority', e.target.value ? [e.target.value as TaskPriority] : undefined)}
+        value={filters.priority || ''}
+        onChange={(e) => onFilterChange('priority', e.target.value ? (e.target.value as TaskPriority) : undefined)}
         options={[
           { value: '', label: 'All Priorities' },
           { value: 'Critical', label: 'Critical' },
@@ -54,8 +54,8 @@ export function TaskFilters({ filters, onFilterChange, onClearFilters }: TaskFil
       {/* Category Filter */}
       <Select
         label="Category"
-        value={filters.category?.[0] || ''}
-        onChange={(e) => onFilterChange('category', e.target.value ? [e.target.value as TaskCategory] : undefined)}
+        value={filters.category || ''}
+        onChange={(e) => onFilterChange('category', e.target.value ? (e.target.value as TaskCategory) : undefined)}
         options={[
           { value: '', label: 'All Categories' },
           { value: 'Development', label: 'Development' },

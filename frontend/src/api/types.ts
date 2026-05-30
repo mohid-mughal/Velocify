@@ -228,9 +228,9 @@ export interface UpdateUserRoleRequest {
 }
 
 export interface TaskFilters {
-  status?: TaskStatus[];
-  priority?: TaskPriority[];
-  category?: TaskCategory[];
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  category?: TaskCategory;
   assignedToUserId?: string;
   dueDateFrom?: string;
   dueDateTo?: string;
