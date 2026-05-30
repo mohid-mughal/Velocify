@@ -38,9 +38,9 @@ export const taskKeys = {
   // Task lists with optional filters
   lists: () => [...taskKeys.all, 'list'] as const,
   list: (filters?: {
-    status?: string[];
-    priority?: string[];
-    category?: string[];
+    status?: string;     // <-- Array brackets removed
+    priority?: string;   // <-- Array brackets removed
+    category?: string;   // <-- Array brackets removed
     assignedToUserId?: string;
     dueDateFrom?: string;
     dueDateTo?: string;
