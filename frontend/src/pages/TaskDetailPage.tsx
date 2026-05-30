@@ -148,11 +148,10 @@ export default function TaskDetailPage() {
           description: '',
           priority: task?.priority || 'Medium',
           category: task?.category || 'Other',
-          assignedToUserId: task?.assignedTo.id || null,
+          assignedToUserId: task?.assignedTo?.id || null,
           dueDate: null,
           estimatedHours: suggestion.estimatedHours,
           tags: [],
-          parentTaskId: taskId,
         })
       )
     )
@@ -203,7 +202,7 @@ export default function TaskDetailPage() {
   }
 
   const isAdmin = user?.role === 'Admin' || user?.role === 'SuperAdmin';
-  const canEdit = isAdmin || task.createdBy.id === user?.id || task.assignedTo.id === user?.id;
+  const canEdit = isAdmin || task.createdBy.id === user?.id || task.assignedTo?.id === user?.id;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -235,7 +234,27 @@ export default function TaskDetailPage() {
                 size="sm"
                 onClick={() => navigate(`/tasks/${taskId}/edit`)}
               >
-                ✏️ Edit Task
+                ✏️ Edit
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => {
+                  if (confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+                    deleteTaskMutation.mutate(taskId!, {
+                      onSuccess: () => {
+                        showSuccess({ title: 'Task deleted successfully' });
+                        navigate('/tasks');
+                      },
+                      onError: () => {
+                        showError({ title: 'Failed to delete task' });
+                      },
+                    });
+                  }
+                }}
+                isLoading={deleteTaskMutation.isPending}
+              >
+                🗑️ Delete
               </Button>
               <Button
                 variant="primary"

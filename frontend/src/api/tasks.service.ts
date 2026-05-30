@@ -66,7 +66,13 @@ export async function getTaskById(id: string): Promise<TaskDetailDto> {
  * @returns Created TaskDto
  */
 export async function createTask(data: CreateTaskRequest): Promise<TaskDto> {
-  const response = await axiosInstance.post<TaskDto>('/tasks', data);
+  // Convert tags array to comma-separated string if needed
+  const payload = {
+    ...data,
+    tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags,
+  };
+  
+  const response = await axiosInstance.post<TaskDto>('/tasks', payload);
   return response.data;
 }
 

@@ -125,8 +125,7 @@ export default function TaskFormPage() {
         assignedToUserId: data.assignedToUserId,
         dueDate: data.dueDate,
         estimatedHours: data.estimatedHours,
-        tags: data.tags,
-        parentTaskId: null,
+        tags: data.tags, // Will be converted to comma-separated string in service
       };
       await createMutation.mutateAsync(createRequest);
     }

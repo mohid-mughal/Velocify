@@ -195,8 +195,7 @@ export interface CreateTaskRequest {
   assignedToUserId: string | null;
   dueDate: string | null;
   estimatedHours: number | null;
-  tags: string[];
-  parentTaskId: string | null;
+  tags: string | string[]; // Backend expects string (comma-separated) or array
 }
 
 export interface UpdateTaskRequest {

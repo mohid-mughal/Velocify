@@ -76,15 +76,19 @@ export const TaskInfo: React.FC<TaskInfoProps> = ({
         <div className="grid grid-cols-2 gap-4 pt-4 border-t">
           <div>
             <span className="text-sm text-neutral-500">Assigned To</span>
-            <div className="flex items-center gap-2 mt-1">
-              <Avatar
-                name={`${task.assignedTo.firstName} ${task.assignedTo.lastName}`}
-                size="sm"
-              />
-              <span className="text-neutral-900">
-                {task.assignedTo.firstName} {task.assignedTo.lastName}
-              </span>
-            </div>
+            {task.assignedTo ? (
+              <div className="flex items-center gap-2 mt-1">
+                <Avatar
+                  name={`${task.assignedTo.firstName} ${task.assignedTo.lastName}`}
+                  size="sm"
+                />
+                <span className="text-neutral-900">
+                  {task.assignedTo.firstName} {task.assignedTo.lastName}
+                </span>
+              </div>
+            ) : (
+              <p className="text-neutral-500 mt-1 italic">Unassigned</p>
+            )}
           </div>
 
           <div>

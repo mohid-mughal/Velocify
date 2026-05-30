@@ -1,0 +1,338 @@
+### Task Management Features - Test Script
+### Use this file to test all task features after deployment
+
+### Variables
+@baseUrl = https://your-api.azurewebsites.net/api/v1
+@accessToken = YOUR_ACCESS_TOKEN_HERE
+@userId = YOUR_USER_ID_HERE
+@taskId = TASK_ID_WILL_BE_SET_AFTER_CREATION
+
+### ============================================
+### 1. CREATE TASK - Unassigned (This was failing before)
+### ============================================
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Test Unassigned Task",
+  "description": "This task has no assignee - testing the fix",
+  "priority": "High",
+  "category": "Development",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": 5.0,
+  "tags": "test,unassigned,fix"
+}
+
+### Expected: 201 Created
+### Copy the task ID from response and set @taskId variable above
+
+### ============================================
+### 2. CREATE TASK - Assigned
+### ============================================
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Test Assigned Task",
+  "description": "This task has an assignee",
+  "priority": "Medium",
+  "category": "Design",
+  "assignedToUserId": "{{userId}}",
+  "dueDate": "2026-06-15T12:00:00Z",
+  "estimatedHours": 3.0,
+  "tags": "test,assigned"
+}
+
+### Expected: 201 Created
+
+### ============================================
+### 3. GET ALL TASKS
+### ============================================
+GET {{baseUrl}}/tasks?pageNumber=1&pageSize=10
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with list of tasks
+
+### ============================================
+### 4. GET TASK BY ID
+### ============================================
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with task details
+### Should show "assignedTo": null for unassigned tasks
+
+### ============================================
+### 5. UPDATE TASK
+### ============================================
+PUT {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Task Title",
+  "description": "Updated description",
+  "priority": "Critical",
+  "category": "Operations",
+  "status": "InProgress",
+  "assignedToUserId": "{{userId}}",
+  "dueDate": "2026-06-20T12:00:00Z",
+  "estimatedHours": 8.0,
+  "actualHours": 2.0,
+  "tags": "test,updated"
+}
+
+### Expected: 200 OK with updated task
+
+### ============================================
+### 6. UPDATE TASK STATUS
+### ============================================
+PATCH {{baseUrl}}/tasks/{{taskId}}/status
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "Completed"
+}
+
+### Expected: 200 OK with updated task
+
+### ============================================
+### 7. ADD COMMENT
+### ============================================
+POST {{baseUrl}}/tasks/{{taskId}}/comments
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "content": "This is a test comment to verify the feature works!"
+}
+
+### Expected: 201 Created with comment details
+### Copy comment ID for next test
+
+### ============================================
+### 8. GET COMMENTS
+### ============================================
+GET {{baseUrl}}/tasks/{{taskId}}/comments
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with list of comments
+
+### ============================================
+### 9. DELETE COMMENT
+### ============================================
+@commentId = COMMENT_ID_FROM_PREVIOUS_RESPONSE
+
+DELETE {{baseUrl}}/tasks/{{taskId}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
+
+### Expected: 204 No Content
+
+### ============================================
+### 10. GET TASK HISTORY (Audit Log)
+### ============================================
+GET {{baseUrl}}/tasks/{{taskId}}/history
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with audit log entries
+
+### ============================================
+### 11. GET SUBTASKS
+### ============================================
+GET {{baseUrl}}/tasks/{{taskId}}/subtasks
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with list of subtasks (may be empty)
+
+### ============================================
+### 12. AI DECOMPOSE TASK
+### ============================================
+POST {{baseUrl}}/ai/decompose-task
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "taskId": "{{taskId}}"
+}
+
+### Expected: 200 OK with suggested subtasks
+
+### ============================================
+### 13. DELETE TASK
+### ============================================
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+
+### Expected: 204 No Content
+
+### ============================================
+### 14. VERIFY TASK IS DELETED
+### ============================================
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 404 Not Found (soft deleted)
+
+### ============================================
+### EDGE CASES TO TEST
+### ============================================
+
+### Test 1: Create task with empty tags
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Task with Empty Tags",
+  "description": "Testing empty tags array",
+  "priority": "Low",
+  "category": "Other",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": null,
+  "tags": ""
+}
+
+### Expected: 201 Created
+
+### Test 2: Create task with multiple tags
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Task with Multiple Tags",
+  "description": "Testing multiple tags",
+  "priority": "Medium",
+  "category": "Development",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": null,
+  "tags": "tag1,tag2,tag3,tag4,tag5"
+}
+
+### Expected: 201 Created
+
+### Test 3: Create task with all null optional fields
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Minimal Task",
+  "description": "Only required fields",
+  "priority": "Medium",
+  "category": "Development",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": null,
+  "tags": ""
+}
+
+### Expected: 201 Created
+
+### Test 4: Try to create task with invalid priority
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Invalid Priority Task",
+  "description": "Testing validation",
+  "priority": "InvalidPriority",
+  "category": "Development",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": null,
+  "tags": ""
+}
+
+### Expected: 400 Bad Request with validation error
+
+### Test 5: Try to create task with missing required field
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "description": "Missing title field",
+  "priority": "Medium",
+  "category": "Development",
+  "assignedToUserId": null,
+  "dueDate": null,
+  "estimatedHours": null,
+  "tags": ""
+}
+
+### Expected: 400 Bad Request with validation error
+
+### ============================================
+### PERFORMANCE TESTS
+### ============================================
+
+### Test 1: Get tasks with filters
+GET {{baseUrl}}/tasks?pageNumber=1&pageSize=20&status=InProgress&priority=High&category=Development
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with filtered results
+
+### Test 2: Get tasks with search
+GET {{baseUrl}}/tasks?pageNumber=1&pageSize=20&searchTerm=test
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with search results
+
+### Test 3: Get tasks with date range
+GET {{baseUrl}}/tasks?pageNumber=1&pageSize=20&dueDateFrom=2026-05-01&dueDateTo=2026-06-30
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### Expected: 200 OK with tasks in date range
+
+### ============================================
+### CHECKLIST
+### ============================================
+
+# After running all tests, verify:
+# [ ] Can create unassigned tasks (Test 1)
+# [ ] Can create assigned tasks (Test 2)
+# [ ] Can get all tasks (Test 3)
+# [ ] Can get task by ID (Test 4)
+# [ ] Can update task (Test 5)
+# [ ] Can update status (Test 6)
+# [ ] Can add comments (Test 7)
+# [ ] Can get comments (Test 8)
+# [ ] Can delete comments (Test 9)
+# [ ] Can get audit history (Test 10)
+# [ ] Can get subtasks (Test 11)
+# [ ] AI decompose works (Test 12)
+# [ ] Can delete tasks (Test 13)
+# [ ] Deleted tasks return 404 (Test 14)
+# [ ] Edge cases handled correctly
+# [ ] Validation errors return 400
+# [ ] Filters work correctly
+# [ ] Search works correctly
+
+### ============================================
+### NOTES
+### ============================================
+
+# 1. Replace {{baseUrl}} with your actual API URL
+# 2. Replace {{accessToken}} with a valid JWT token
+# 3. Replace {{userId}} with your user ID
+# 4. After creating a task, copy the ID and set {{taskId}}
+# 5. After creating a comment, copy the ID and set {{commentId}}
+# 6. All tests should pass without errors
+# 7. The main fix was making assignedToUserId optional (Test 1)

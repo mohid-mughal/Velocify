@@ -27,7 +27,9 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskD
             Status = TaskStatus.Pending,
             Priority = request.Priority,
             Category = request.Category,
-            AssignedTo = new UserSummaryDto { Id = request.AssignedToUserId },
+            AssignedTo = request.AssignedToUserId.HasValue 
+                ? new UserSummaryDto { Id = request.AssignedToUserId.Value }
+                : null, // Allow unassigned tasks
             CreatedBy = new UserSummaryDto { Id = request.CreatedByUserId },
             DueDate = request.DueDate,
             EstimatedHours = request.EstimatedHours,

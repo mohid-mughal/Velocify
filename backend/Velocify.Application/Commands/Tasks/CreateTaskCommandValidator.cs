@@ -16,8 +16,8 @@ public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
         RuleFor(x => x.Category)
             .IsInEnum().WithMessage("Category must be a valid value");
 
-        RuleFor(x => x.AssignedToUserId)
-            .NotEmpty().WithMessage("AssignedToUserId is required");
+        // AssignedToUserId is now optional - tasks can be unassigned
+        // Removed: RuleFor(x => x.AssignedToUserId).NotEmpty()
 
         RuleFor(x => x.EstimatedHours)
             .GreaterThan(0).When(x => x.EstimatedHours.HasValue)
