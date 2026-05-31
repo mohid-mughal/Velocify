@@ -389,7 +389,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
               {digestData && (
                 <div className="p-4 bg-gradient-to-br from-primary-50 to-secondary-50 border border-primary-200 rounded-md">
                   <div className="prose prose-sm max-w-none">
-                    <p className="text-neutral-700 whitespace-pre-wrap">{digestData}</p>
+                    {/* Extract the string summary from the DigestResult object */}
+                    <p className="text-neutral-700 whitespace-pre-wrap">{digestData.summary}</p>
+                    
+                    {/* Optional: You can also display the encouraging message! */}
+                    {digestData.encouragingMessage && (
+                      <p className="text-primary-700 font-medium mt-4 italic">{digestData.encouragingMessage}</p>
+                    )}
                   </div>
                 </div>
               )}

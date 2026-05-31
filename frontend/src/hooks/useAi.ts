@@ -21,6 +21,7 @@ import type {
   WorkloadSuggestion,
   TaskDto,
   TaskImportRow,
+  DigestResult,
 } from '../api/types';
 
 /**
@@ -124,9 +125,10 @@ export function useWorkloadSuggestions(enabled: boolean = true) {
  * @returns Query result with digest content as string
  */
 export function useDigest(enabled: boolean = true) {
-  return useQuery({
+  return useQuery<DigestResult>({ // <-- Added <DigestResult> here
     queryKey: aiKeys.digest(),
-    queryFn: () => aiService.getMyDigest(),
+    // We add an async wrapper and cast the result so TypeScript knows it's an object, not a string
+    queryFn: async () => (await aiService.getMyDigest()) as unknown as DigestResult,
     enabled,
     // Cache for 1 hour since digest is generated daily
     staleTime: 1000 * 60 * 60,

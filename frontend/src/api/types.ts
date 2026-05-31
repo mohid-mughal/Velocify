@@ -151,6 +151,14 @@ export interface NotificationDto {
 
 // ============== AI DTOs ==============
 
+export interface DigestResult {
+  summary: string;
+  tasksDueToday: number;
+  overdueTasks: number;
+  priorityRecommendations: string[];
+  encouragingMessage: string;
+}
+
 export interface SubtaskSuggestion {
   title: string;
   estimatedHours: number | null;
