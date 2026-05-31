@@ -29,4 +29,7 @@ public class ParsedTaskResult
     public TaskCategory? Category { get; set; }
     public string? AssigneeEmail { get; set; }
     public DateTime? DueDate { get; set; }
+
+    public decimal? EstimatedHours { get; set; }
+    public List<string>? Tags { get; set; }
 }

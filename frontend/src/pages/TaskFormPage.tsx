@@ -38,38 +38,66 @@ export default function TaskFormPage() {
   const queryClient = useQueryClient();
   const isEditMode = Boolean(id);
 
-  // Check if we arrived here from the AI Assistant Drawer
-  const incomingAiTask = location.state?.parsedTask as CreateTaskRequest | undefined;
+// Check if we arrived here from the AI Assistant Drawer
+  const incomingAiTask: any = location.state?.parsedTask;
 
-  // If we have an incoming AI task, start in manual mode
   const [mode, setMode] = useState<FormMode>(incomingAiTask ? 'manual' : 'natural');
-  
-  // If we have an incoming AI task, format it immediately
-  const [parsedData, setParsedData] = useState<Partial<TaskFormData> | null>(() => {
-    if (!incomingAiTask) return null;
-    
-    return {
-      title: incomingAiTask.title || '',
-      description: incomingAiTask.description || '',
-      priority: incomingAiTask.priority || 'Medium',
-      category: incomingAiTask.category || 'Development',
-      assignedToUserId: incomingAiTask.assignedToUserId || null,
-      dueDate: incomingAiTask.dueDate || null,
-      estimatedHours: incomingAiTask.estimatedHours || null,
-      tags: Array.isArray(incomingAiTask.tags) 
-            ? incomingAiTask.tags 
-            : typeof incomingAiTask.tags === 'string' 
-              ? incomingAiTask.tags.split(',').map(t => t.trim()).filter(Boolean) 
-              : [],
-    };
-  });
-  
+  const [parsedData, setParsedData] = useState<Partial<TaskFormData> | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
+
   // Fetch users for assignee dropdown (all authenticated users can see this)
   const { data: usersData } = useQuery({
     queryKey: queryKeys.users.list(),
     queryFn: () => usersService.getActiveUsers(),
   });
+
+  // EFFECT: Wait for usersData to load, then map the AI data to the form inputs
+  useEffect(() => {
+    if (incomingAiTask && usersData) {
+      let matchedUserId = incomingAiTask.assignedToUserId || null;
+      
+      // Match assigneeEmail to a real user ID from the database
+      if (incomingAiTask.assigneeEmail) {
+        const matchedUser = usersData.find(
+          (u) => u.email.toLowerCase() === incomingAiTask.assigneeEmail.toLowerCase()
+        );
+        if (matchedUser) {
+          matchedUserId = matchedUser.id;
+        }
+      }
+
+      // Bulletproof date formatting for the HTML date picker (Requires strictly YYYY-MM-DD)
+      let formattedDate = incomingAiTask.dueDate || null;
+      if (formattedDate) {
+        try {
+          // Convert any date string (e.g. 10/06/2026 or ISO) to a valid Date object, then extract YYYY-MM-DD
+          const d = new Date(formattedDate);
+          if (!isNaN(d.getTime())) {
+            formattedDate = d.toISOString().split('T')[0];
+          }
+        } catch (e) {
+          console.warn("Could not parse AI date:", formattedDate);
+        }
+      }
+
+      setParsedData({
+        title: incomingAiTask.title || '',
+        description: incomingAiTask.description || '',
+        priority: incomingAiTask.priority || 'Medium',
+        category: incomingAiTask.category || 'Development',
+        assignedToUserId: matchedUserId,
+        dueDate: formattedDate,
+        estimatedHours: incomingAiTask.estimatedHours || null,
+        tags: Array.isArray(incomingAiTask.tags) 
+              ? incomingAiTask.tags 
+              : typeof incomingAiTask.tags === 'string' 
+                ? incomingAiTask.tags.split(',').map((t: string) => t.trim()).filter(Boolean) 
+                : [],
+      });
+      setMode('manual');
+    }
+  }, [incomingAiTask, usersData]);
+
 
   // Fetch existing task for edit mode
   const { data: existingTask, isLoading: isLoadingTask } = useQuery({

@@ -168,16 +168,18 @@ public class NaturalLanguageTaskService : INaturalLanguageTaskService
 
 Fields to extract:
 - title: A concise task title (required, max 200 characters)
-- description: Detailed task description (optional)
+- description: Detailed task description (optional, do NOT include tags or hours here)
 - priority: One of: Critical, High, Medium, Low (optional, default to Medium if unclear)
 - category: One of: Development, Design, Marketing, Operations, Research, Other (optional, default to Other if unclear)
 - assigneeEmail: Email address of the person to assign the task to (optional)
-- dueDate: Due date in ISO 8601 format (optional, e.g., 2024-12-31T23:59:59Z)
+- dueDate: Due date strictly in YYYY-MM-DD format (optional)
+- estimatedHours: Estimated hours as a decimal number (optional, e.g. 45.0)
+- tags: Array of string tags (optional)
 
 Rules:
 - If a field cannot be determined, set it to null
 - For priority and category, use exact enum values listed above
-- For dueDate, parse relative dates like ""tomorrow"", ""next week"", ""in 3 days"" into absolute ISO dates
+- Calculate relative dates using today's date ({DateTime.UtcNow:yyyy-MM-dd}) and output STRICTLY as YYYY-MM-DD
 - Return ONLY valid JSON, no additional text
 
 User input:
@@ -190,7 +192,9 @@ Return JSON in this exact format:
   ""priority"": ""Critical|High|Medium|Low or null"",
   ""category"": ""Development|Design|Marketing|Operations|Research|Other or null"",
   ""assigneeEmail"": ""string or null"",
-  ""dueDate"": ""ISO 8601 string or null""
+  ""dueDate"": ""YYYY-MM-DD or null"",
+  ""estimatedHours"": 45.0,
+  ""tags"": [""tag1"", ""tag2""]
 }}";
 
         var response = await model.GenerateAsync(prompt);
