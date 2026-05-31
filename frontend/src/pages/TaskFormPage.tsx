@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { NaturalLanguageInput } from '../components/forms/NaturalLanguageInput';
 import { TaskForm } from '../components/forms/TaskForm';
@@ -34,13 +34,37 @@ type FormMode = 'natural' | 'manual';
 export default function TaskFormPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation(); // <-- Add this
   const queryClient = useQueryClient();
   const isEditMode = Boolean(id);
 
-  const [mode, setMode] = useState<FormMode>('natural');
-  const [parsedData, setParsedData] = useState<Partial<TaskFormData> | null>(null);
-  const [parseError, setParseError] = useState<string | null>(null);
+  // Check if we arrived here from the AI Assistant Drawer
+  const incomingAiTask = location.state?.parsedTask as CreateTaskRequest | undefined;
 
+  // If we have an incoming AI task, start in manual mode
+  const [mode, setMode] = useState<FormMode>(incomingAiTask ? 'manual' : 'natural');
+  
+  // If we have an incoming AI task, format it immediately
+  const [parsedData, setParsedData] = useState<Partial<TaskFormData> | null>(() => {
+    if (!incomingAiTask) return null;
+    
+    return {
+      title: incomingAiTask.title || '',
+      description: incomingAiTask.description || '',
+      priority: incomingAiTask.priority || 'Medium',
+      category: incomingAiTask.category || 'Development',
+      assignedToUserId: incomingAiTask.assignedToUserId || null,
+      dueDate: incomingAiTask.dueDate || null,
+      estimatedHours: incomingAiTask.estimatedHours || null,
+      tags: Array.isArray(incomingAiTask.tags) 
+            ? incomingAiTask.tags 
+            : typeof incomingAiTask.tags === 'string' 
+              ? incomingAiTask.tags.split(',').map(t => t.trim()).filter(Boolean) 
+              : [],
+    };
+  });
+  
+  const [parseError, setParseError] = useState<string | null>(null);
   // Fetch users for assignee dropdown (all authenticated users can see this)
   const { data: usersData } = useQuery({
     queryKey: queryKeys.users.list(),

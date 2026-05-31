@@ -12,6 +12,7 @@
  */
 
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { clsx } from 'clsx';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -388,13 +389,17 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({ isOpen, on
 
               {digestData && (
                 <div className="p-4 bg-gradient-to-br from-primary-50 to-secondary-50 border border-primary-200 rounded-md">
-                  <div className="prose prose-sm max-w-none">
-                    {/* Extract the string summary from the DigestResult object */}
-                    <p className="text-neutral-700 whitespace-pre-wrap">{digestData.summary}</p>
+                  <div className="prose prose-sm max-w-none text-neutral-700">
                     
-                    {/* Optional: You can also display the encouraging message! */}
+                    {/* Wrap the summary in the ReactMarkdown component */}
+                    <ReactMarkdown>
+                      {digestData.summary}
+                    </ReactMarkdown>
+                    
                     {digestData.encouragingMessage && (
-                      <p className="text-primary-700 font-medium mt-4 italic">{digestData.encouragingMessage}</p>
+                      <p className="text-primary-700 font-medium mt-4 italic">
+                        {digestData.encouragingMessage}
+                      </p>
                     )}
                   </div>
                 </div>
