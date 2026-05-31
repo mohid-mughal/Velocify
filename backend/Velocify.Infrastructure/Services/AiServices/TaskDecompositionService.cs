@@ -164,7 +164,7 @@ public class TaskDecompositionService : ITaskDecompositionService
         var config = new OpenAiConfiguration 
         {
             ApiKey = apiKey,
-            Endpoint = "api.groq.com/openai/v1"
+            Endpoint = "api.groq.com/openai"
         };
 
         var provider = new OpenAiProvider(config);
