@@ -4,9 +4,9 @@ An AI-augmented task management platform built with ASP.NET Core 8, React 18, an
 
 ## Already Deployed At:
 
-**Frontend**: https://velocify-work.vercel.app/login
-**Backend**: https://velocify.azurewebsites.net/
-**Backend Health Check**: https://velocify.azurewebsites.net/health
+- **Frontend**: https://velocify-work.vercel.app/login
+- **Backend**: https://velocify.azurewebsites.net/
+- **Backend Health Check**: https://velocify.azurewebsites.net/health
 
 ## Architecture
 
