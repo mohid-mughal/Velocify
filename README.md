@@ -2,6 +2,12 @@
 
 An AI-augmented task management platform built with ASP.NET Core 8, React 18, and Azure SQL Database. Features real-time collaboration via SignalR, LangChain-powered AI capabilities, and advanced database optimizations.
 
+## Already Deployed At:
+
+**Frontend**: https://velocify-work.vercel.app/login
+**Backend**: https://velocify.azurewebsites.net/
+**Backend Health Check**: https://velocify.azurewebsites.net/health
+
 ## Architecture
 
 - **Backend**: ASP.NET Core 8 Web API with Clean Architecture (Domain, Application, Infrastructure, API layers)
